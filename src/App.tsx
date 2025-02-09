@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import Navigation from "./components/Navigation";
 import Overview from "./pages/Overview";
-import Index from "./pages/Index";
+import Index from "./pages/Chat";
 import Configuration from "./pages/Configuration";
 import HumanVerification from "./pages/HumanVerification";
 import Leaderboards from "./pages/Leaderboards";
