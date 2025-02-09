@@ -19,7 +19,11 @@ type ConfigurationForm = Omit<UserConfiguration, 'id' | 'created_at' | 'updated_
 
 const Configuration = () => {
   const { user } = useAuth();
-  const form = useForm<ConfigurationForm>();
+  const form = useForm<ConfigurationForm>({
+    defaultValues: {
+      data_sharing_enabled: true,
+    },
+  });
 
   useEffect(() => {
     const loadConfiguration = async () => {
@@ -45,7 +49,7 @@ const Configuration = () => {
           assistant_reasoning_effort: data.assistant_reasoning_effort,
           assistant_temperature: data.assistant_temperature,
           assistant_system_prompt: data.assistant_system_prompt || "",
-          data_sharing_enabled: data.data_sharing_enabled,
+          data_sharing_enabled: data.data_sharing_enabled ?? true,
           openrouter_api_key: data.openrouter_api_key || "",
         });
       }
@@ -269,56 +273,63 @@ const Configuration = () => {
             </Card>
 
             <Card className="bg-card/50 border-white/10">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Share2 className="w-5 h-5" />
-                  Data Sharing Settings
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="data_sharing_enabled"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">Contribute to AI Safety Research</FormLabel>
-                        <FormDescription>
-                          Enable anonymous data integration and research dataset contribution
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+              <Collapsible>
+                <CollapsibleTrigger className="w-full">
+                  <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle className="flex items-center gap-2">
+                      <Share2 className="w-5 h-5" />
+                      Data Sharing Settings
+                    </CardTitle>
+                    <ChevronDown className="w-4 h-4 transition-transform duration-200" />
+                  </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <CardContent className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="data_sharing_enabled"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">Contribute to AI Safety Research</FormLabel>
+                            <FormDescription>
+                              Enable anonymous data integration and research dataset contribution
+                            </FormDescription>
+                          </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
 
-                {!form.watch("data_sharing_enabled") && (
-                  <FormField
-                    control={form.control}
-                    name="openrouter_api_key"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>OpenRouter API Key</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Enter your OpenRouter API key"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Required when data sharing is disabled
-                        </FormDescription>
-                      </FormItem>
+                    {!form.watch("data_sharing_enabled") && (
+                      <FormField
+                        control={form.control}
+                        name="openrouter_api_key"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>OpenRouter API Key</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="password"
+                                placeholder="Enter your OpenRouter API key"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormDescription>
+                              Required when data sharing is disabled
+                            </FormDescription>
+                          </FormItem>
+                        )}
+                      />
                     )}
-                  />
-                )}
-              </CardContent>
+                  </CardContent>
+                </CollapsibleContent>
+              </Collapsible>
             </Card>
 
             <div className="flex justify-end">
