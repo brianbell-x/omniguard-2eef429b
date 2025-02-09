@@ -54,7 +54,7 @@ const Sidebar = () => {
 
       {/* Desktop Sidebar */}
       {!isMobile && (
-        <div className="w-64 h-[calc(100vh-3.5rem)] border-r border-white/10 p-4">
+        <div className="h-[calc(100vh-3.5rem)] border-r border-white/10 p-4">
           <NavContent />
         </div>
       )}
