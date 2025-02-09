@@ -1,8 +1,8 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ArrowRight, LayoutDashboard, MessageCircle, Settings, Shield, UserCheck, FileText, Info, Database, Download } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ArrowRight, LayoutDashboard, MessageCircle, Settings, Shield, UserCheck, FileText, Info, Database, Download, ChevronDown } from "lucide-react";
 
 const Overview = () => {
   const sections = [
@@ -35,10 +35,48 @@ const Overview = () => {
     { label: "Avg. Latency", value: "280ms" },
   ];
 
+  const datasetExample = `{
+  "conversation_id": "Unique identifier for this evaluation instance",
+  "omniguard_evaluation_input": {
+    "configuration": "<configuration>Safety configuration with rules and instructions</configuration>",
+    "conversation": "<input><![CDATA[{
+      \\"id\\": \\"string\\",
+      \\"messages\\": [
+        {\\"role\\": \\"system\\", \\"content\\": \\"\\"},
+        {\\"role\\": \\"user\\", \\"content\\": \\"\\"},
+        {\\"role\\": \\"assistant\\", \\"content\\": \\"\\"}
+      ]
+    }]]></input>"
+  },
+  "omniguard_raw_response": {
+    "conversation_id": "string",
+    "analysisSummary": "Short note on triggered rules or 'No violations'.",
+    "response": {
+      "action": "allow | UserInputRejection | AssistantOutputRejection",
+      "UserInputRejection": "string",
+      "AssistantOutputRejection": "string"
+    }
+  },
+  "assistant_output": "Final response from assistant (if OmniGuard allowed the content)",
+  "user_violates_rules": true,
+  "assistant_violates_rules": false,
+  "model_name": "Model used for OmniGuard evaluation",
+  "reasoning_effort": "Level of reasoning effort applied",
+  "contributor": "Who contributed this data point",
+  "created_at": "2024-02-07T13:30:03.123Z",
+  "prompt_tokens": 0,
+  "completion_tokens": 0,
+  "total_tokens": 0,
+  "input_cost": 0.0000,
+  "output_cost": 0.0000,
+  "total_cost": 0.0000,
+  "latency_ms": 0,
+  "needed_human_verification": false
+}`;
+
   return (
     <div className="min-h-screen bg-background">
       <div className="flex">
-        {/* Sidebar */}
         <div className="w-64 h-[calc(100vh-3.5rem)] border-r border-white/10 p-4 hidden lg:block">
           <nav className="space-y-2">
             <a href="#overview" className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-white/5 transition-colors">
@@ -64,10 +102,8 @@ const Overview = () => {
           </nav>
         </div>
 
-        {/* Main Content */}
         <ScrollArea className="flex-1 h-[calc(100vh-3.5rem)]">
           <div className="max-w-6xl mx-auto p-6 space-y-8">
-            {/* Header */}
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Shield className="w-8 h-8" />
@@ -78,7 +114,6 @@ const Overview = () => {
               </p>
             </div>
 
-            {/* Stats */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               {stats.map((stat, index) => (
                 <Card key={index} className="bg-card/50 border-white/10">
@@ -94,7 +129,6 @@ const Overview = () => {
               ))}
             </div>
 
-            {/* Features Grid */}
             <div className="grid gap-4 md:grid-cols-2">
               {sections.map((section, index) => (
                 <Card key={index} className="bg-card/50 border-white/10">
@@ -113,9 +147,7 @@ const Overview = () => {
               ))}
             </div>
 
-            {/* Detailed Sections */}
             <div className="space-y-8">
-              {/* System Flow */}
               <section id="system-flow" className="space-y-4">
                 <h2 className="text-2xl font-bold tracking-tight">System Flow</h2>
                 <Card className="bg-card/50 border-white/10">
@@ -146,7 +178,6 @@ const Overview = () => {
                 </Card>
               </section>
 
-              {/* Configuration */}
               <section id="configuration" className="space-y-4">
                 <h2 className="text-2xl font-bold tracking-tight">Configuration</h2>
                 <Tabs defaultValue="purpose" className="w-full">
@@ -221,7 +252,6 @@ const Overview = () => {
                 </Tabs>
               </section>
 
-              {/* Dataset */}
               <section id="dataset" className="space-y-4">
                 <h2 className="text-2xl font-bold tracking-tight">Dataset</h2>
                 <Card className="bg-card/50 border-white/10">
@@ -238,11 +268,24 @@ const Overview = () => {
                         Download
                       </button>
                     </div>
+
+                    <Collapsible className="space-y-2">
+                      <CollapsibleTrigger className="flex items-center gap-2 text-sm font-medium hover:underline">
+                        <ChevronDown className="w-4 h-4" />
+                        View Dataset Format Example
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <div className="mt-2 p-4 bg-black/20 rounded-md">
+                          <pre className="text-xs overflow-x-auto whitespace-pre">
+                            {datasetExample}
+                          </pre>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
                   </CardContent>
                 </Card>
               </section>
 
-              {/* Project Info */}
               <section id="info" className="space-y-4">
                 <h2 className="text-2xl font-bold tracking-tight">Project Information</h2>
                 <div className="grid gap-4 md:grid-cols-2">
