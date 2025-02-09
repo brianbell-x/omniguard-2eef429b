@@ -2,6 +2,7 @@
 import { useState } from "react";
 import ChatMessage from "@/components/chat/ChatMessage";
 import ChatInput from "@/components/chat/ChatInput";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Message {
   content: string;
@@ -30,24 +31,26 @@ const Index = () => {
 
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem)] bg-background">
-      <main className="flex-1 overflow-y-auto px-4 py-4">
-        <div className="max-w-3xl mx-auto">
-          {messages.map((message, index) => (
-            <ChatMessage
-              key={index}
-              content={message.content}
-              isUser={message.isUser}
-            />
-          ))}
-          {isLoading && (
-            <ChatMessage
-              content="..."
-              isUser={false}
-              animate={false}
-            />
-          )}
+      <ScrollArea className="flex-1">
+        <div className="px-4 py-4">
+          <div className="max-w-3xl mx-auto">
+            {messages.map((message, index) => (
+              <ChatMessage
+                key={index}
+                content={message.content}
+                isUser={message.isUser}
+              />
+            ))}
+            {isLoading && (
+              <ChatMessage
+                content="..."
+                isUser={false}
+                animate={false}
+              />
+            )}
+          </div>
         </div>
-      </main>
+      </ScrollArea>
       <div className="max-w-3xl mx-auto w-full">
         <ChatInput onSend={handleSendMessage} disabled={isLoading} />
       </div>
