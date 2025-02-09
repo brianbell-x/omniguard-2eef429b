@@ -10,7 +10,7 @@ interface DatasetSectionProps {
 const DatasetSection = ({ datasetExample }: DatasetSectionProps) => {
   return (
     <section id="dataset" className="space-y-4">
-      <h2 className="text-2xl font-bold tracking-tight text-center">Dataset</h2>
+      <h2 className="text-2xl font-bold tracking-tight">Dataset</h2>
       <Card className="bg-card/50 border-white/10">
         <CardContent className="p-6 space-y-4">
           <div className="flex justify-between items-center">
