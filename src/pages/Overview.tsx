@@ -8,7 +8,7 @@ const Overview = () => {
   const sections = [
     {
       title: "System Overview",
-      description: "OmniGuard is a conversation moderation system designed to enforce content safety through rule-based assessments.",
+      description: "OmniGuard is a reasoning based conversation moderation system for text-based LLM interactions, continuously running rule violation assessment for each turn of user and assistant messages.",
       icon: <Shield className="w-6 h-6" />,
     },
     {
@@ -74,7 +74,7 @@ const Overview = () => {
                 <h1 className="text-3xl font-bold tracking-tight">OmniGuard - Conversation Moderation System (BETA)</h1>
               </div>
               <p className="text-muted-foreground">
-                A comprehensive solution for moderating conversations and enforcing content safety through intelligent rule-based assessments.
+                A reasoning based conversation moderation system for text-based LLM interactions. The system effectively mitigates the majority of potential violations and attacks through its comprehensive rule set and reasoning-based approach. Together, we're building a safer, more robust AI ecosystem.
               </p>
             </div>
 
@@ -120,20 +120,26 @@ const Overview = () => {
                 <h2 className="text-2xl font-bold tracking-tight">System Flow</h2>
                 <Card className="bg-card/50 border-white/10">
                   <CardContent className="p-6 space-y-4">
-                    <div className="flex items-center gap-4 text-sm">
-                      <div className="flex items-center gap-2">
-                        <MessageCircle className="w-4 h-4" />
-                        <span>Message Input</span>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-4 text-sm">
+                        <div className="flex items-center gap-2">
+                          <MessageCircle className="w-4 h-4" />
+                          <span>Message Input</span>
+                        </div>
+                        <ArrowRight className="w-4 h-4" />
+                        <div className="flex items-center gap-2">
+                          <Shield className="w-4 h-4" />
+                          <span>Rule Assessment</span>
+                        </div>
+                        <ArrowRight className="w-4 h-4" />
+                        <div className="flex items-center gap-2">
+                          <UserCheck className="w-4 h-4" />
+                          <span>Moderation Output</span>
+                        </div>
                       </div>
-                      <ArrowRight className="w-4 h-4" />
-                      <div className="flex items-center gap-2">
-                        <Shield className="w-4 h-4" />
-                        <span>Rule Assessment</span>
-                      </div>
-                      <ArrowRight className="w-4 h-4" />
-                      <div className="flex items-center gap-2">
-                        <UserCheck className="w-4 h-4" />
-                        <span>Moderation Output</span>
+                      <div className="space-y-4 text-sm text-muted-foreground">
+                        <p>OmniGuard inspects every incoming message to assess compliance with the active rules. If a violation is detected, OmniGuard either sanitizes minor issues or, in cases of major violations, replaces the message with a safe, generic refusal.</p>
+                        <p>When ambiguity exists, OmniGuard proactively asks for clarification to fully understand the user's intent before finalizing a moderation decision.</p>
                       </div>
                     </div>
                   </CardContent>
@@ -153,7 +159,7 @@ const Overview = () => {
                     <Card className="bg-card/50 border-white/10">
                       <CardContent className="p-6">
                         <p className="text-sm text-muted-foreground">
-                          OmniGuard serves as a content moderation system, evaluating conversations for compliance with safety guidelines and content policies.
+                          The safety configuration is injected into the system to prime OmniGuard with all necessary guidelines and behavioral protocols before any messages are processed. This ensures consistent and effective moderation across all conversations.
                         </p>
                       </CardContent>
                     </Card>
@@ -162,7 +168,7 @@ const Overview = () => {
                     <Card className="bg-card/50 border-white/10">
                       <CardContent className="p-6">
                         <p className="text-sm text-muted-foreground">
-                          Detailed guidelines for message evaluation, including criteria for acceptance, rejection, and clarification requests.
+                          Detailed guidelines for message evaluation, including criteria for acceptance, rejection, and clarification requests. The configuration primes OmniGuard with all necessary guidelines and behavioral protocols.
                         </p>
                       </CardContent>
                     </Card>
@@ -170,9 +176,15 @@ const Overview = () => {
                   <TabsContent value="rules" className="mt-4">
                     <Card className="bg-card/50 border-white/10">
                       <CardContent className="p-6">
-                        <p className="text-sm text-muted-foreground">
-                          Specific content policies enforced by the system, organized by categories with clear examples and explanations.
-                        </p>
+                        <div className="space-y-4">
+                          <p className="text-sm text-muted-foreground">
+                            Specific content policies enforced by the system, organized by categories with clear examples and explanations.
+                          </p>
+                          <div className="text-sm bg-black/20 p-4 rounded-md font-mono">
+                            {`{ "role": "developer", "content": {"type": "text", "text": "<CONFIGURATION>"} }
+{ "role": "user", "content": {"type": "text", "text": "<CONVERSATION>"} }`}
+                          </div>
+                        </div>
                       </CardContent>
                     </Card>
                   </TabsContent>
