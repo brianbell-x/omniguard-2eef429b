@@ -4,11 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 const ProjectInfo = () => {
   return (
     <section id="info" className="space-y-4">
-      <h2 className="text-2xl font-bold tracking-tight">Project Information</h2>
+      <h2 className="text-2xl font-bold tracking-tight text-center">Project Information</h2>
       <div className="grid gap-4 md:grid-cols-2">
         <Card className="bg-card/50 border-white/10">
           <CardHeader>
-            <CardTitle>Development Timeline</CardTitle>
+            <CardTitle className="text-center">Development Timeline</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 text-sm">
@@ -29,7 +29,7 @@ const ProjectInfo = () => {
         </Card>
         <Card className="bg-card/50 border-white/10">
           <CardHeader>
-            <CardTitle>Cost Metrics</CardTitle>
+            <CardTitle className="text-center">Cost Metrics</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 text-sm">

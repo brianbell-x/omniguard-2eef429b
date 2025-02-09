@@ -10,7 +10,7 @@ interface ConfigurationSectionProps {
 const ConfigurationSection = ({ configurationXml }: ConfigurationSectionProps) => {
   return (
     <section id="configuration" className="space-y-4">
-      <h2 className="text-2xl font-bold tracking-tight">Configuration</h2>
+      <h2 className="text-2xl font-bold tracking-tight text-center">Configuration</h2>
       <Card className="bg-card/50 border-white/10">
         <Collapsible>
           <CollapsibleTrigger className="w-full flex items-center justify-between p-6">
