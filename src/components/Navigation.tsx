@@ -12,7 +12,6 @@ const Navigation = () => {
   const links = [
     { href: "/", label: "Overview", icon: LayoutDashboard },
     { href: "/chat", label: "Chat", icon: MessageCircle },
-    { href: "/configuration", label: "Configuration", icon: Settings },
     { href: "/verification", label: "Verification", icon: UserCheck },
     { href: "/leaderboards", label: "Leaderboards", icon: Trophy },
     { href: "/donations", label: "Donations", icon: Heart },
@@ -40,6 +39,14 @@ const Navigation = () => {
             ))}
           </div>
           <div className="flex items-center gap-4">
+            {location.pathname === "/chat" && (
+              <Link
+                to="/configuration"
+                className="text-white/70 hover:text-white transition-colors"
+              >
+                <Settings className="w-5 h-5" />
+              </Link>
+            )}
             {user ? (
               <>
                 <span className="text-sm text-white/70">@{user.username}</span>
