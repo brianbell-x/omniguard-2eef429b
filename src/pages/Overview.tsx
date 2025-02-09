@@ -1,4 +1,3 @@
-
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Shield } from "lucide-react";
 import ProjectStats from "@/components/overview/ProjectStats";
@@ -97,7 +96,6 @@ const Overview = () => {
     <div className="min-h-screen bg-background">
       <ScrollArea className="h-[calc(100vh-3.5rem)]">
         <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-8 md:space-y-12">
-          {/* Header Section */}
           <div className="space-y-8">
             <div className="flex items-center gap-2 justify-center">
               <Shield className="w-6 h-6 md:w-8 md:h-8" />
@@ -105,39 +103,16 @@ const Overview = () => {
             </div>
             <div className="flex flex-col gap-8 items-center justify-center">
               <p className="text-sm md:text-base text-muted-foreground/80 max-w-[600px] text-center leading-relaxed">
-                A reasoning based conversation moderation system for text-based LLM interactions. The system effectively mitigates the majority of potential violations and attacks through its comprehensive rule set and reasoning-based approach.
+                A reasoning based conversation moderation system for text-based LLM interactions. The system effectively mitigates the majority of potential violations and attacks through its comprehensive rule set and reasoning-based approach. Together, we're building a safer, more robust AI ecosystem.
               </p>
               <ProjectStats stats={stats} />
             </div>
           </div>
           
           <div className="space-y-12 md:space-y-16">
-            {/* Configuration Section */}
-            <section className="space-y-4">
-              <div className="space-y-2">
-                <h2 className="text-2xl font-semibold tracking-tight">Configuration</h2>
-                <p className="text-sm text-muted-foreground">System safety rules and behavioral protocols</p>
-              </div>
-              <ConfigurationSection configurationXml={configurationXml} />
-            </section>
-
-            {/* Dataset Section */}
-            <section className="space-y-4">
-              <div className="space-y-2">
-                <h2 className="text-2xl font-semibold tracking-tight">Dataset</h2>
-                <p className="text-sm text-muted-foreground">Evaluation samples and interaction records</p>
-              </div>
-              <DatasetSection datasetExample={datasetExample} />
-            </section>
-
-            {/* Project Information Section */}
-            <section className="space-y-4">
-              <div className="space-y-2">
-                <h2 className="text-2xl font-semibold tracking-tight">Project Information</h2>
-                <p className="text-sm text-muted-foreground">Development timeline and resource allocation</p>
-              </div>
-              <ProjectInfo />
-            </section>
+            <ConfigurationSection configurationXml={configurationXml} />
+            <DatasetSection datasetExample={datasetExample} />
+            <ProjectInfo />
           </div>
         </div>
       </ScrollArea>
