@@ -20,14 +20,14 @@ const DatasetSection = ({ datasetExample }: DatasetSectionProps) => {
                 Access the full conversation dataset in JSONL format
               </p>
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-white/10 hover:bg-white/20 transition-colors">
+            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-[#0EA5E9] hover:bg-[#0EA5E9]/90 transition-colors text-white">
               <Download className="w-4 h-4" />
               Download
             </button>
           </div>
 
           <Collapsible className="space-y-3">
-            <CollapsibleTrigger className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-muted-foreground/80 transition-colors">
+            <CollapsibleTrigger className="flex items-center gap-2 text-sm font-medium text-[#0EA5E9] hover:text-[#0EA5E9]/80 transition-colors">
               <ChevronDown className="w-4 h-4" />
               View Dataset Format Example
             </CollapsibleTrigger>

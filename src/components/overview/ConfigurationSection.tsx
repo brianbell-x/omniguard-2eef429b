@@ -15,10 +15,10 @@ const ConfigurationSection = ({ configurationXml }: ConfigurationSectionProps) =
         <Collapsible>
           <CollapsibleTrigger className="w-full flex items-center justify-between p-6">
             <div className="flex items-center gap-2">
-              <Settings className="w-5 h-5 text-muted-foreground" />
+              <Settings className="w-5 h-5 text-[#0EA5E9]" />
               <span className="font-medium text-sm">View Configuration XML</span>
             </div>
-            <ChevronDown className="w-4 h-4 text-muted-foreground" />
+            <ChevronDown className="w-4 h-4 text-[#0EA5E9]" />
           </CollapsibleTrigger>
           <CollapsibleContent>
             <CardContent>
