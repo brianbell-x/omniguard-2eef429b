@@ -22,9 +22,6 @@ const DatasetSection = ({ datasetExample }: DatasetSectionProps) => {
           <div className="flex justify-between items-center">
             <div className="space-y-2">
               <h3 className="font-medium text-base">Download Complete Dataset</h3>
-              <p className="text-sm text-muted-foreground/80">
-                Select your preferred format
-              </p>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
