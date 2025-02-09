@@ -39,6 +39,51 @@ export type Database = {
         }
         Relationships: []
       }
+      user_configurations: {
+        Row: {
+          assistant_model: string | null
+          assistant_reasoning_effort: string | null
+          assistant_system_prompt: string | null
+          assistant_temperature: number | null
+          created_at: string | null
+          data_sharing_enabled: boolean | null
+          id: string
+          omni_custom_config: string | null
+          omni_model: string | null
+          omni_reasoning_effort: string | null
+          openrouter_api_key: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          assistant_model?: string | null
+          assistant_reasoning_effort?: string | null
+          assistant_system_prompt?: string | null
+          assistant_temperature?: number | null
+          created_at?: string | null
+          data_sharing_enabled?: boolean | null
+          id: string
+          omni_custom_config?: string | null
+          omni_model?: string | null
+          omni_reasoning_effort?: string | null
+          openrouter_api_key?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          assistant_model?: string | null
+          assistant_reasoning_effort?: string | null
+          assistant_system_prompt?: string | null
+          assistant_temperature?: number | null
+          created_at?: string | null
+          data_sharing_enabled?: boolean | null
+          id?: string
+          omni_custom_config?: string | null
+          omni_model?: string | null
+          omni_reasoning_effort?: string | null
+          openrouter_api_key?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
