@@ -104,7 +104,7 @@ const Overview = () => {
                 <Shield className="w-6 h-6 md:w-8 md:h-8" />
                 <h1 className="text-2xl md:text-3xl font-bold tracking-tight">OmniGuard - Conversation Moderation System (BETA)</h1>
               </div>
-              <div className="flex flex-col-reverse md:flex-row gap-6 items-center justify-between">
+              <div className="flex flex-col-reverse md:flex-row gap-6 items-center justify-center">
                 <p className="text-sm md:text-base text-muted-foreground max-w-[600px] flex-grow flex items-center text-center">
                   A reasoning based conversation moderation system for text-based LLM interactions. The system effectively mitigates the majority of potential violations and attacks through its comprehensive rule set and reasoning-based approach. Together, we're building a safer, more robust AI ecosystem.
                 </p>
