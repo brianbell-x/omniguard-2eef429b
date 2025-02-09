@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,35 +22,23 @@ const DonationForm = () => {
     creator: 0,
   });
 
-  // Update other allocations when one changes to maintain 100% total
   const handleAllocationChange = (type: "api" | "bounties" | "creator", value: number) => {
-    const oldValue = allocations[type];
-    const difference = value - oldValue;
-    
-    if (difference === 0) return;
-
     const newAllocations = { ...allocations };
     newAllocations[type] = value;
 
-    // Adjust other allocations proportionally
-    const othersTotal = 100 - value;
-    const types = ["api", "bounties", "creator"].filter((t) => t !== type) as Array<"api" | "bounties" | "creator">;
-    
-    if (othersTotal > 0) {
-      const currentOthersTotal = types.reduce((sum, t) => sum + allocations[t], 0);
-      types.forEach((t) => {
-        newAllocations[t] = Math.round((allocations[t] / currentOthersTotal) * othersTotal);
-      });
-      
-      // Handle rounding errors
-      const total = Object.values(newAllocations).reduce((sum, val) => sum + val, 0);
-      if (total !== 100) {
-        newAllocations[types[0]] += 100 - total;
-      }
+    // Adjust other allocations
+    if (type === "api") {
+      newAllocations.bounties = 100 - value - allocations.creator;
+    } else if (type === "bounties") {
+      newAllocations.api = 100 - value - allocations.creator;
     } else {
-      types.forEach((t) => {
-        newAllocations[t] = 0;
-      });
+      // If creator is changed, adjust API and bounties proportionally
+      const remaining = 100 - value;
+      const total = allocations.api + allocations.bounties;
+      if (total > 0) {
+        newAllocations.api = Math.round((allocations.api / total) * remaining);
+        newAllocations.bounties = remaining - newAllocations.api;
+      }
     }
 
     setAllocations(newAllocations);
@@ -98,7 +87,7 @@ const DonationForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-8">
       <div className="space-y-2">
         <Label htmlFor="amount">Amount (USD)</Label>
         <Input
@@ -110,6 +99,7 @@ const DonationForm = () => {
           onChange={(e) => setAmount(e.target.value)}
           placeholder="Enter amount"
           required
+          className="bg-black/20"
         />
       </div>
 
@@ -117,7 +107,7 @@ const DonationForm = () => {
         <Label>Allocation</Label>
         <div className="space-y-6">
           <div className="space-y-2">
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between">
               <span>API Balance</span>
               <span>{allocations.api}%</span>
             </div>
@@ -126,11 +116,12 @@ const DonationForm = () => {
               onValueChange={([value]) => handleAllocationChange("api", value)}
               max={100}
               step={1}
+              className="cursor-pointer"
             />
           </div>
 
           <div className="space-y-2">
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between">
               <span>Bounties</span>
               <span>{allocations.bounties}%</span>
             </div>
@@ -139,11 +130,12 @@ const DonationForm = () => {
               onValueChange={([value]) => handleAllocationChange("bounties", value)}
               max={100}
               step={1}
+              className="cursor-pointer"
             />
           </div>
 
           <div className="space-y-2">
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between">
               <span>Creator</span>
               <span>{allocations.creator}%</span>
             </div>
@@ -152,6 +144,7 @@ const DonationForm = () => {
               onValueChange={([value]) => handleAllocationChange("creator", value)}
               max={100}
               step={1}
+              className="cursor-pointer"
             />
           </div>
         </div>
@@ -164,6 +157,7 @@ const DonationForm = () => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Leave a message with your donation"
+          className="bg-black/20 min-h-[100px]"
         />
       </div>
 
@@ -176,7 +170,11 @@ const DonationForm = () => {
         <Label htmlFor="anonymous">Make donation anonymous</Label>
       </div>
 
-      <Button type="submit" disabled={isSubmitting || !user}>
+      <Button 
+        type="submit" 
+        disabled={isSubmitting || !user}
+        className="w-32 bg-white/10 hover:bg-white/20"
+      >
         {isSubmitting ? "Processing..." : "Donate"}
       </Button>
     </form>
@@ -189,7 +187,7 @@ const Donations = () => {
       <div className="max-w-xl mx-auto">
         <h1 className="text-3xl font-bold text-center mb-8">Support the Project</h1>
         <div>
-          <h2 className="text-xl font-semibold text-center mb-4">Make a Donation</h2>
+          <h2 className="text-xl font-semibold text-center mb-8">Make a Donation</h2>
           <DonationForm />
         </div>
       </div>
