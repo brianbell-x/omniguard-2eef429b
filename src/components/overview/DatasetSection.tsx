@@ -18,9 +18,9 @@ const DatasetSection = ({ datasetExample }: DatasetSectionProps) => {
     <section id="dataset" className="space-y-6">
       <h2 className="text-2xl font-semibold tracking-tight">Dataset</h2>
       <Card className="bg-card/50 border-white/10">
-        <CardContent className="p-6 space-y-6">
-          <div className="flex justify-between items-center">
-            <div className="space-y-2">
+        <CardContent className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <div>
               <h3 className="font-medium text-base">Download Complete Dataset</h3>
             </div>
             <DropdownMenu>
