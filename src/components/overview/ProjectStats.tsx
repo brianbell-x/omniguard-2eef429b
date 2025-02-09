@@ -12,7 +12,7 @@ interface ProjectStatsProps {
 
 const ProjectStats = ({ stats }: ProjectStatsProps) => {
   return (
-    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-3">
       {stats.map((stat, index) => (
         <Card key={index} className="bg-card/50 border-white/10">
           <CardHeader className="pb-2">
@@ -21,7 +21,7 @@ const ProjectStats = ({ stats }: ProjectStatsProps) => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xl md:text-2xl font-bold">{stat.value}</p>
+            <p className="text-xl font-bold">{stat.value}</p>
           </CardContent>
         </Card>
       ))}
