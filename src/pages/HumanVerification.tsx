@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -108,8 +107,8 @@ const HumanVerification = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <div className="h-[calc(100vh-56px)] overflow-y-auto bg-background p-6">
+      <div className="max-w-4xl mx-auto space-y-8 pb-6">
         <div className="flex items-center justify-between">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight">Human Verification</h1>
