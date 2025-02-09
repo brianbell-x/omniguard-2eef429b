@@ -9,11 +9,9 @@ import { Navigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 
 const Auth = () => {
-  const { user, signIn, signUp } = useAuth();
-  const [isLogin, setIsLogin] = useState(true);
+  const { user, signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -25,11 +23,7 @@ const Auth = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      if (isLogin) {
-        await signIn(email, password);
-      } else {
-        await signUp(email, password, username);
-      }
+      await signIn(email, password);
     } catch (error) {
       console.error(error);
     } finally {
@@ -41,11 +35,9 @@ const Auth = () => {
     <div className="min-h-screen bg-background p-6 flex items-center justify-center">
       <Card className="w-full max-w-md bg-card/50 border-white/10">
         <CardHeader>
-          <CardTitle>{isLogin ? "Welcome Back" : "Create Account"}</CardTitle>
+          <CardTitle>Welcome Back</CardTitle>
           <CardDescription>
-            {isLogin
-              ? "Sign in to your account to continue"
-              : "Sign up for a new account"}
+            Sign in to your account to continue
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -83,36 +75,10 @@ const Auth = () => {
                 </button>
               </div>
             </div>
-            {!isLogin && (
-              <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
-                <Input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </div>
-            )}
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading
-                ? "Loading..."
-                : isLogin
-                ? "Sign In"
-                : "Create Account"}
+              {loading ? "Loading..." : "Sign In"}
             </Button>
           </form>
-          <div className="mt-4 text-center">
-            <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-sm text-primary hover:underline"
-            >
-              {isLogin
-                ? "Need an account? Sign up"
-                : "Already have an account? Sign in"}
-            </button>
-          </div>
         </CardContent>
       </Card>
     </div>
