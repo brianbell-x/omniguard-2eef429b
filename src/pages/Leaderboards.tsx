@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { Trophy } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -22,15 +23,15 @@ async function fetchTable(table: string, orderKey: string) {
 }
 
 const Leaderboards = () => {
-  const { data: contributors = [] } = useQuery(
-    ["contributors"],
-    () => fetchTable("contributor_stats", "total_contributions")
-  );
+  const { data: contributors = [] } = useQuery({
+    queryKey: ["contributors"],
+    queryFn: () => fetchTable("contributor_stats", "total_contributions")
+  });
 
-  const { data: donors = [] } = useQuery(
-    ["donors"],
-    () => fetchTable("donor_stats", "total_donated")
-  );
+  const { data: donors = [] } = useQuery({
+    queryKey: ["donors"],
+    queryFn: () => fetchTable("donor_stats", "total_donated")
+  });
 
   return (
     <div className="min-h-[calc(100vh-56px)] bg-background">
@@ -42,10 +43,6 @@ const Leaderboards = () => {
                 <Trophy className="w-6 h-6 md:w-8 md:h-8" />
                 Leaderboards
               </h1>
-              {/*
-                Subheading removed to minimize cognitive load.
-                The purpose is now clear from the title and the tabs.
-              */}
             </div>
 
             <Tabs defaultValue="contributors">
