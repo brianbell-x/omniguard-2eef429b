@@ -1,21 +1,12 @@
-
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-
-const PRESET_AMOUNTS = [
-  { value: "5", label: "$5" },
-  { value: "25", label: "$25" },
-  { value: "100", label: "$100" },
-  { value: "custom", label: "Custom" }
-];
+import { DonationAmountSelector } from "@/components/donations/DonationAmountSelector";
+import { AllocationSliders } from "@/components/donations/AllocationSliders";
 
 const DonationForm = () => {
   const { user } = useAuth();
@@ -35,11 +26,6 @@ const DonationForm = () => {
       return parseFloat(customAmount) || 0;
     }
     return parseFloat(selectedAmount) || 0;
-  };
-
-  const getAllocatedAmount = (percentage: number) => {
-    const total = getCurrentAmount();
-    return ((percentage / 100) * total).toFixed(2);
   };
 
   const handleAmountSelect = (amount: string) => {
@@ -117,86 +103,21 @@ const DonationForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {PRESET_AMOUNTS.map((amount) => (
-          <button
-            key={amount.value}
-            type="button"
-            onClick={() => handleAmountSelect(amount.value)}
-            className={cn(
-              "h-12 px-4 rounded-lg border transition-colors",
-              selectedAmount === amount.value
-                ? "border-primary bg-primary/10"
-                : "border-input hover:border-primary"
-            )}
-          >
-            {amount.label}
-          </button>
-        ))}
-      </div>
-
-      {isCustom && (
-        <div className="space-y-2">
-          <Label htmlFor="customAmount">Custom Amount (USD)</Label>
-          <Input
-            id="customAmount"
-            type="number"
-            step="0.01"
-            min="0.01"
-            value={customAmount}
-            onChange={(e) => setCustomAmount(e.target.value)}
-            placeholder="Enter amount"
-            required
-            className="bg-black/20"
-          />
-        </div>
-      )}
+      <DonationAmountSelector
+        selectedAmount={selectedAmount}
+        customAmount={customAmount}
+        isCustom={isCustom}
+        onAmountSelect={handleAmountSelect}
+        onCustomAmountChange={setCustomAmount}
+      />
 
       <div className="space-y-4">
         <Label>Allocation</Label>
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span>API Balance</span>
-              <span>${getAllocatedAmount(allocations.api)} ({allocations.api}%)</span>
-            </div>
-            <Slider
-              value={[allocations.api]}
-              onValueChange={([value]) => handleAllocationChange("api", value)}
-              max={100}
-              step={1}
-              className="cursor-pointer"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span>Bounties</span>
-              <span>${getAllocatedAmount(allocations.bounties)} ({allocations.bounties}%)</span>
-            </div>
-            <Slider
-              value={[allocations.bounties]}
-              onValueChange={([value]) => handleAllocationChange("bounties", value)}
-              max={100}
-              step={1}
-              className="cursor-pointer"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span>Creator</span>
-              <span>${getAllocatedAmount(allocations.creator)} ({allocations.creator}%)</span>
-            </div>
-            <Slider
-              value={[allocations.creator]}
-              onValueChange={([value]) => handleAllocationChange("creator", value)}
-              max={100}
-              step={1}
-              className="cursor-pointer"
-            />
-          </div>
-        </div>
+        <AllocationSliders
+          allocations={allocations}
+          currentAmount={getCurrentAmount()}
+          onAllocationChange={handleAllocationChange}
+        />
       </div>
 
       <div className="flex items-center space-x-2">
