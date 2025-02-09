@@ -7,6 +7,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Flag } from "lucide-react";
 
 interface ChatMessageProps {
   content: string;
@@ -22,6 +24,11 @@ const ChatMessage = ({ content, isUser, animate = true }: ChatMessageProps) => {
       messageRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [content]);
+
+  const handleReport = () => {
+    // TODO: Implement report functionality
+    console.log(`Reporting message: ${content}`);
+  };
 
   return (
     <div
@@ -52,6 +59,15 @@ const ChatMessage = ({ content, isUser, animate = true }: ChatMessageProps) => {
                 <p>Sent by: {isUser ? 'You' : 'Assistant'}</p>
                 <p>Length: {content.length} characters</p>
                 <p>Time: {new Date().toLocaleTimeString()}</p>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-400/10"
+                  onClick={handleReport}
+                >
+                  <Flag className="mr-2 h-4 w-4" />
+                  Report Message
+                </Button>
               </div>
             </AccordionContent>
           </AccordionItem>
