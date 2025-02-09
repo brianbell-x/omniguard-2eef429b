@@ -39,6 +39,60 @@ export type Database = {
         }
         Relationships: []
       }
+      reported_conversations: {
+        Row: {
+          assistant_violation_votes: number | null
+          created_at: string
+          decision_details: Json | null
+          decision_made_at: string | null
+          final_decision: string | null
+          id: string
+          message_content: string
+          reason: string
+          reported_at: string
+          safe_votes: number | null
+          status: string | null
+          total_votes: number | null
+          updated_at: string
+          user_id: string | null
+          user_violation_votes: number | null
+        }
+        Insert: {
+          assistant_violation_votes?: number | null
+          created_at?: string
+          decision_details?: Json | null
+          decision_made_at?: string | null
+          final_decision?: string | null
+          id?: string
+          message_content: string
+          reason: string
+          reported_at?: string
+          safe_votes?: number | null
+          status?: string | null
+          total_votes?: number | null
+          updated_at?: string
+          user_id?: string | null
+          user_violation_votes?: number | null
+        }
+        Update: {
+          assistant_violation_votes?: number | null
+          created_at?: string
+          decision_details?: Json | null
+          decision_made_at?: string | null
+          final_decision?: string | null
+          id?: string
+          message_content?: string
+          reason?: string
+          reported_at?: string
+          safe_votes?: number | null
+          status?: string | null
+          total_votes?: number | null
+          updated_at?: string
+          user_id?: string | null
+          user_violation_votes?: number | null
+        }
+        Relationships: []
+      }
       user_configurations: {
         Row: {
           assistant_model: string | null
@@ -83,6 +137,41 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      verification_votes: {
+        Row: {
+          comment: string | null
+          conversation_id: string | null
+          created_at: string
+          id: string
+          vote_type: string
+          voter_id: string | null
+        }
+        Insert: {
+          comment?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          id?: string
+          vote_type: string
+          voter_id?: string | null
+        }
+        Update: {
+          comment?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          id?: string
+          vote_type?: string
+          voter_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "verification_votes_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "reported_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
