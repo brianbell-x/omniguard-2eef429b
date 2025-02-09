@@ -12,30 +12,30 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
-          discord_handle: string | null
-          handle: string | null
+          discord: string | null
           id: string
-          linked_url: string | null
+          linkedin: string | null
           updated_at: string
           username: string
+          x: string | null
         }
         Insert: {
           created_at?: string
-          discord_handle?: string | null
-          handle?: string | null
+          discord?: string | null
           id: string
-          linked_url?: string | null
+          linkedin?: string | null
           updated_at?: string
           username: string
+          x?: string | null
         }
         Update: {
           created_at?: string
-          discord_handle?: string | null
-          handle?: string | null
+          discord?: string | null
           id?: string
-          linked_url?: string | null
+          linkedin?: string | null
           updated_at?: string
           username?: string
+          x?: string | null
         }
         Relationships: []
       }
