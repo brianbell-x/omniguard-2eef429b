@@ -10,9 +10,8 @@ import { AllocationSliders } from "@/components/donations/AllocationSliders";
 
 const DonationForm = () => {
   const { user } = useAuth();
-  const [selectedAmount, setSelectedAmount] = useState<string>("25");
-  const [customAmount, setCustomAmount] = useState("");
-  const [isCustom, setIsCustom] = useState(false);
+  // Combined the selectedAmount and customAmount into one state.
+  const [donationAmount, setDonationAmount] = useState("25");
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [allocations, setAllocations] = useState({
@@ -21,38 +20,32 @@ const DonationForm = () => {
     creator: 0,
   });
 
-  const getCurrentAmount = () => {
-    if (isCustom) {
-      return parseFloat(customAmount) || 0;
-    }
-    return parseFloat(selectedAmount) || 0;
-  };
+  // Now simply parse the donationAmount value.
+  const getCurrentAmount = () => parseFloat(donationAmount) || 0;
 
-  const handleAmountSelect = (amount: string) => {
-    if (amount === "custom") {
-      setIsCustom(true);
-      setSelectedAmount("custom");
-    } else {
-      setIsCustom(false);
-      setSelectedAmount(amount);
-      setCustomAmount("");
-    }
-  };
+  // Simplified allocation logic: recalculate the remaining allocations in one pass.
+  const handleAllocationChange = (
+    type: "api" | "bounties" | "creator",
+    value: number
+  ) => {
+    const newAllocations = { ...allocations, [type]: value };
 
-  const handleAllocationChange = (type: "api" | "bounties" | "creator", value: number) => {
-    const newAllocations = { ...allocations };
-    newAllocations[type] = value;
-
-    if (type === "api") {
-      newAllocations.bounties = 100 - value - allocations.creator;
-    } else if (type === "bounties") {
-      newAllocations.api = 100 - value - allocations.creator;
-    } else {
+    if (type === "creator") {
       const remaining = 100 - value;
       const total = allocations.api + allocations.bounties;
       if (total > 0) {
         newAllocations.api = Math.round((allocations.api / total) * remaining);
         newAllocations.bounties = remaining - newAllocations.api;
+      } else {
+        newAllocations.api = Math.round(remaining / 2);
+        newAllocations.bounties = remaining - newAllocations.api;
+      }
+    } else {
+      const remaining = 100 - newAllocations.creator;
+      if (type === "api") {
+        newAllocations.bounties = remaining - value;
+      } else if (type === "bounties") {
+        newAllocations.api = remaining - value;
       }
     }
 
@@ -62,7 +55,7 @@ const DonationForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
-      toast.error("Please sign in to make a donation");
+      toast.error("Sign in required");
       return;
     }
 
@@ -76,7 +69,7 @@ const DonationForm = () => {
     try {
       // Placeholder for Stripe integration
       toast.info("Stripe integration coming soon!");
-      
+
       const { error } = await supabase.from("donations").insert({
         user_id: user.id,
         amount,
@@ -89,9 +82,7 @@ const DonationForm = () => {
       if (error) throw error;
 
       toast.success("Thank you for your donation!");
-      setSelectedAmount("25");
-      setCustomAmount("");
-      setIsCustom(false);
+      setDonationAmount("25");
       setIsAnonymous(false);
       setAllocations({ api: 50, bounties: 50, creator: 0 });
     } catch (error: any) {
@@ -104,11 +95,8 @@ const DonationForm = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <DonationAmountSelector
-        selectedAmount={selectedAmount}
-        customAmount={customAmount}
-        isCustom={isCustom}
-        onAmountSelect={handleAmountSelect}
-        onCustomAmountChange={setCustomAmount}
+        donationAmount={donationAmount}
+        onDonationAmountChange={setDonationAmount}
       />
 
       <div className="space-y-4">
@@ -126,14 +114,12 @@ const DonationForm = () => {
           checked={isAnonymous}
           onCheckedChange={setIsAnonymous}
         />
-        <Label htmlFor="anonymous">Make donation anonymous</Label>
+        {/* Renamed label for clarity */}
+        <Label htmlFor="anonymous">Anonymous</Label>
       </div>
 
-      <Button 
-        type="submit" 
-        disabled={isSubmitting || !user}
-        className="w-full bg-primary hover:bg-primary/90"
-      >
+      {/* Use shadcn-ui Button variant instead of custom className */}
+      <Button type="submit" disabled={isSubmitting || !user} variant="primary" className="w-full">
         {isSubmitting ? "Processing..." : "Continue"}
       </Button>
     </form>
@@ -144,7 +130,10 @@ const Donations = () => {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="max-w-xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8">Support the Project</h1>
+        {/* Swapped to a shadcn-ui Heading component with minimal styling */}
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+          Donate
+        </h1>
         <DonationForm />
       </div>
     </div>
