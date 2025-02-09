@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Flag } from "lucide-react";
 
-type MessageStatus = "safe" | "unsafe" | "warning";
+type MessageStatus = "UserRejection" | "AssistantRejection" | "warning";
 
 interface ChatMessageProps {
   content: string;
@@ -33,7 +33,7 @@ const ChatMessage = ({
   }
 }: ChatMessageProps) => {
   const messageRef = useRef<HTMLDivElement>(null);
-  const messageStatus: MessageStatus = safetyAssessment.safe ? "safe" : "unsafe";
+  const messageStatus: MessageStatus = !safetyAssessment.safe ? (isUser ? "UserRejection" : "AssistantRejection") : "warning";
 
   useEffect(() => {
     if (messageRef.current) {
@@ -48,7 +48,8 @@ const ChatMessage = ({
 
   const getStatusColor = (status: MessageStatus) => {
     switch (status) {
-      case "unsafe":
+      case "UserRejection":
+      case "AssistantRejection":
         return "outline outline-1 outline-destructive/30";
       case "warning":
         return "outline outline-1 outline-yellow-500/30";
@@ -104,7 +105,7 @@ const ChatMessage = ({
           {!safetyAssessment.safe && (
             <div className="flex items-center gap-2">
               <Badge variant="destructive" className="text-[10px]">
-                UNSAFE
+                {messageStatus.toUpperCase()}
               </Badge>
               <TooltipProvider>
                 <Tooltip>
