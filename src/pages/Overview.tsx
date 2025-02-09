@@ -1,4 +1,3 @@
-
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Shield } from "lucide-react";
 import Sidebar from "@/components/overview/Sidebar";
@@ -101,7 +100,7 @@ const Overview = () => {
         <ScrollArea className="flex-1 h-[calc(100vh-3.5rem)]">
           <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-6 md:space-y-8">
             <div className="space-y-2">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-center">
                 <Shield className="w-6 h-6 md:w-8 md:h-8" />
                 <h1 className="text-2xl md:text-3xl font-bold tracking-tight">OmniGuard - Conversation Moderation System (BETA)</h1>
               </div>
