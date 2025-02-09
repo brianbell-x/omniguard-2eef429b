@@ -1,13 +1,23 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronDown, Settings } from "lucide-react";
+import { ChevronDown, Settings, Copy } from "lucide-react";
+import { toast } from "sonner";
 
 interface ConfigurationSectionProps {
   configurationXml: string;
 }
 
 const ConfigurationSection = ({ configurationXml }: ConfigurationSectionProps) => {
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(configurationXml);
+      toast.success("Configuration copied to clipboard");
+    } catch (err) {
+      toast.error("Failed to copy configuration");
+    }
+  };
+
   return (
     <section id="configuration" className="space-y-6">
       <h2 className="text-2xl font-semibold tracking-tight">Configuration</h2>
@@ -21,7 +31,14 @@ const ConfigurationSection = ({ configurationXml }: ConfigurationSectionProps) =
             <ChevronDown className="w-4 h-4 text-[#0EA5E9]" />
           </CollapsibleTrigger>
           <CollapsibleContent>
-            <CardContent>
+            <CardContent className="relative">
+              <button
+                onClick={handleCopy}
+                className="absolute top-4 right-4 p-2 rounded-md hover:bg-white/10 transition-colors"
+                title="Copy to clipboard"
+              >
+                <Copy className="w-4 h-4" />
+              </button>
               <pre className="bg-black/20 p-4 rounded-md overflow-x-auto text-xs text-muted-foreground/90">
                 {configurationXml}
               </pre>
