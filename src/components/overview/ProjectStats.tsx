@@ -1,5 +1,6 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface StatItem {
   label: string;
@@ -11,20 +12,28 @@ interface ProjectStatsProps {
 }
 
 const ProjectStats = ({ stats }: ProjectStatsProps) => {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-      {stats.map((stat, index) => (
-        <Card key={index} className="bg-card/50 border-white/10">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              {stat.label}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xl md:text-2xl font-bold">{stat.value}</p>
-          </CardContent>
-        </Card>
-      ))}
+    <div className="overflow-hidden rounded-lg border border-white/10">
+      <Table>
+        <TableBody>
+          {stats.map((stat, index) => (
+            <TableRow key={index} className="hover:bg-white/5">
+              <TableCell className={`py-2 ${isMobile ? 'px-3' : 'px-4'}`}>
+                <span className="text-sm font-medium text-muted-foreground">
+                  {stat.label}
+                </span>
+              </TableCell>
+              <TableCell className={`py-2 ${isMobile ? 'px-3' : 'px-4'} text-right`}>
+                <span className="font-bold text-base md:text-lg">
+                  {stat.value}
+                </span>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 };
