@@ -30,6 +30,18 @@ const DonationForm = () => {
     creator: 0,
   });
 
+  const getCurrentAmount = () => {
+    if (isCustom) {
+      return parseFloat(customAmount) || 0;
+    }
+    return parseFloat(selectedAmount) || 0;
+  };
+
+  const getAllocatedAmount = (percentage: number) => {
+    const total = getCurrentAmount();
+    return ((percentage / 100) * total).toFixed(2);
+  };
+
   const handleAmountSelect = (amount: string) => {
     if (amount === "custom") {
       setIsCustom(true);
@@ -68,7 +80,7 @@ const DonationForm = () => {
       return;
     }
 
-    const amount = isCustom ? parseFloat(customAmount) : parseFloat(selectedAmount);
+    const amount = getCurrentAmount();
     if (isNaN(amount) || amount <= 0) {
       toast.error("Please enter a valid amount");
       return;
@@ -146,7 +158,7 @@ const DonationForm = () => {
           <div className="space-y-2">
             <div className="flex justify-between">
               <span>API Balance</span>
-              <span>{allocations.api}%</span>
+              <span>${getAllocatedAmount(allocations.api)} ({allocations.api}%)</span>
             </div>
             <Slider
               value={[allocations.api]}
@@ -160,7 +172,7 @@ const DonationForm = () => {
           <div className="space-y-2">
             <div className="flex justify-between">
               <span>Bounties</span>
-              <span>{allocations.bounties}%</span>
+              <span>${getAllocatedAmount(allocations.bounties)} ({allocations.bounties}%)</span>
             </div>
             <Slider
               value={[allocations.bounties]}
@@ -174,7 +186,7 @@ const DonationForm = () => {
           <div className="space-y-2">
             <div className="flex justify-between">
               <span>Creator</span>
-              <span>{allocations.creator}%</span>
+              <span>${getAllocatedAmount(allocations.creator)} ({allocations.creator}%)</span>
             </div>
             <Slider
               value={[allocations.creator]}
