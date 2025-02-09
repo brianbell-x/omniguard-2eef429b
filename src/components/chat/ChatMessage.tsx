@@ -2,13 +2,16 @@
 import { cn } from "@/lib/utils";
 import { useEffect, useRef } from "react";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Flag } from "lucide-react";
+
+type MessageStatus = "safe" | "unsafe" | "warning";
 
 interface ChatMessageProps {
   content: string;
@@ -24,13 +27,13 @@ const ChatMessage = ({
   content, 
   isUser, 
   animate = true,
-  // Default all messages to unsafe for testing the UI feedback
   safetyAssessment = { 
     safe: false,
-    reason: 'Test message - all messages are marked unsafe by default for testing'
+    reason: "Test message - all messages are marked unsafe by default for testing"
   }
 }: ChatMessageProps) => {
   const messageRef = useRef<HTMLDivElement>(null);
+  const messageStatus: MessageStatus = safetyAssessment.safe ? "safe" : "unsafe";
 
   useEffect(() => {
     if (messageRef.current) {
@@ -41,6 +44,17 @@ const ChatMessage = ({
   const handleReport = () => {
     // TODO: Implement report functionality
     console.log(`Reporting message: ${content}`);
+  };
+
+  const getStatusColor = (status: MessageStatus) => {
+    switch (status) {
+      case "unsafe":
+        return "outline outline-1 outline-destructive/30";
+      case "warning":
+        return "outline outline-1 outline-yellow-500/30";
+      default:
+        return "";
+    }
   };
 
   return (
@@ -54,46 +68,62 @@ const ChatMessage = ({
     >
       <div
         className={cn(
-          "max-w-[80%] rounded-2xl overflow-hidden",
+          "relative max-w-[80%] rounded-2xl p-4",
           isUser
             ? "bg-white/10 text-white glass-morphism"
             : "bg-white/5 text-white/90 neo-blur",
-          !safetyAssessment.safe && "animate-shake shadow-[0_0_15px_rgba(239,68,68,0.3)]"
+          !safetyAssessment.safe && getStatusColor(messageStatus)
         )}
       >
-        <Accordion type="single" collapsible>
-          <AccordionItem value="message-details" className="border-none">
-            <AccordionTrigger className="px-4 py-3 hover:no-underline">
-              <div className="flex flex-col items-start gap-1 w-full">
-                <p className="text-sm leading-relaxed whitespace-pre-wrap break-words text-left">
-                  {content}
-                </p>
-                {!safetyAssessment.safe && (
-                  <span className="text-xs text-red-400">
-                    ⚠️ Safety Warning: {safetyAssessment.reason || 'This message may be unsafe'}
-                  </span>
-                )}
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="px-4 pb-3 text-sm text-white/70">
-              <div className="space-y-2">
-                <p>Sent by: {isUser ? 'You' : 'Assistant'}</p>
-                <p>Length: {content.length} characters</p>
-                <p>Time: {new Date().toLocaleTimeString()}</p>
-                <p>Safety Status: {safetyAssessment.safe ? '✅ Safe' : '❌ Unsafe'}</p>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-400/10"
-                  onClick={handleReport}
-                >
-                  <Flag className="mr-2 h-4 w-4" />
-                  Report Message
-                </Button>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-start justify-between gap-4">
+            <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+              {content}
+            </p>
+            {!safetyAssessment.safe && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 text-destructive hover:text-destructive/80"
+                      onClick={handleReport}
+                    >
+                      <Flag className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Report this message</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+          </div>
+          
+          {!safetyAssessment.safe && (
+            <div className="flex items-center gap-2">
+              <Badge variant="destructive" className="text-[10px]">
+                UNSAFE
+              </Badge>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="sm" className="h-5 px-2 text-xs text-muted-foreground hover:text-foreground">
+                      Details
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="space-y-2">
+                    <p>Sent by: {isUser ? "You" : "Assistant"}</p>
+                    <p>Length: {content.length} characters</p>
+                    <p>Time: {new Date().toLocaleTimeString()}</p>
+                    <p>Reason: {safetyAssessment.reason}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
