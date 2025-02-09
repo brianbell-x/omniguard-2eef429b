@@ -102,12 +102,7 @@ const DonationsList = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("donations")
-        .select(`
-          *,
-          profiles:user_id (
-            username
-          )
-        `)
+        .select("*, profiles:user_id(username)")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
