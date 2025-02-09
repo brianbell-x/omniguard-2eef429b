@@ -7,6 +7,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 interface Message {
   content: string;
   isUser: boolean;
+  isEditing?: boolean;
+  edited?: boolean;
 }
 
 const Index = () => {
@@ -29,6 +31,22 @@ const Index = () => {
     }, 1000);
   };
 
+  const toggleEditMessage = (index: number) => {
+    setMessages(prev =>
+      prev.map((m, i) =>
+        i === index ? { ...m, isEditing: !m.isEditing } : m
+      )
+    );
+  };
+
+  const updateMessage = (index: number, newContent: string) => {
+    setMessages(prev =>
+      prev.map((m, i) => 
+        i === index ? { ...m, content: newContent, isEditing: false, edited: true } : m
+      )
+    );
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem)] bg-background">
       <ScrollArea className="flex-1">
@@ -39,6 +57,11 @@ const Index = () => {
                 key={index}
                 content={message.content}
                 isUser={message.isUser}
+                isEditing={message.isEditing}
+                edited={message.edited}
+                onEdit={() => toggleEditMessage(index)}
+                onSave={(content) => updateMessage(index, content)}
+                onCancel={() => toggleEditMessage(index)}
               />
             ))}
             {isLoading && (
