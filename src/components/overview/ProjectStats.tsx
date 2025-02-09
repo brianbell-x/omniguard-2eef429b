@@ -1,5 +1,4 @@
 
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface StatItem {
@@ -15,26 +14,21 @@ const ProjectStats = ({ stats }: ProjectStatsProps) => {
   const isMobile = useIsMobile();
 
   return (
-    <div className="flex justify-center">
-      <div className="inline-block overflow-hidden rounded-lg border border-white/10">
-        <Table>
-          <TableBody>
-            {stats.map((stat, index) => (
-              <TableRow key={index} className="hover:bg-white/5">
-                <TableCell className={`py-2 ${isMobile ? 'px-3' : 'px-4'} text-center`}>
-                  <span className="text-sm font-medium text-muted-foreground">
-                    {stat.label}
-                  </span>
-                </TableCell>
-                <TableCell className={`py-2 ${isMobile ? 'px-3' : 'px-4'} text-center`}>
-                  <span className="font-bold text-base md:text-lg">
-                    {stat.value}
-                  </span>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+    <div className="w-full max-w-3xl">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
+        {stats.map((stat, index) => (
+          <div
+            key={index}
+            className="flex flex-col items-center justify-center p-4 rounded-lg border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
+          >
+            <span className="text-sm font-medium text-muted-foreground mb-1">
+              {stat.label}
+            </span>
+            <span className="font-bold text-base md:text-lg tracking-tight">
+              {stat.value}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
