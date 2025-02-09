@@ -6,14 +6,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+
+const PRESET_AMOUNTS = [
+  { value: "5", label: "$5" },
+  { value: "25", label: "$25" },
+  { value: "100", label: "$100" },
+  { value: "custom", label: "Custom" }
+];
 
 const DonationForm = () => {
   const { user } = useAuth();
-  const [amount, setAmount] = useState("");
-  const [message, setMessage] = useState("");
+  const [selectedAmount, setSelectedAmount] = useState<string>("25");
+  const [customAmount, setCustomAmount] = useState("");
+  const [isCustom, setIsCustom] = useState(false);
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [allocations, setAllocations] = useState({
@@ -22,17 +30,26 @@ const DonationForm = () => {
     creator: 0,
   });
 
+  const handleAmountSelect = (amount: string) => {
+    if (amount === "custom") {
+      setIsCustom(true);
+      setSelectedAmount("custom");
+    } else {
+      setIsCustom(false);
+      setSelectedAmount(amount);
+      setCustomAmount("");
+    }
+  };
+
   const handleAllocationChange = (type: "api" | "bounties" | "creator", value: number) => {
     const newAllocations = { ...allocations };
     newAllocations[type] = value;
 
-    // Adjust other allocations
     if (type === "api") {
       newAllocations.bounties = 100 - value - allocations.creator;
     } else if (type === "bounties") {
       newAllocations.api = 100 - value - allocations.creator;
     } else {
-      // If creator is changed, adjust API and bounties proportionally
       const remaining = 100 - value;
       const total = allocations.api + allocations.bounties;
       if (total > 0) {
@@ -51,8 +68,8 @@ const DonationForm = () => {
       return;
     }
 
-    const numAmount = parseFloat(amount);
-    if (isNaN(numAmount) || numAmount <= 0) {
+    const amount = isCustom ? parseFloat(customAmount) : parseFloat(selectedAmount);
+    if (isNaN(amount) || amount <= 0) {
       toast.error("Please enter a valid amount");
       return;
     }
@@ -64,8 +81,7 @@ const DonationForm = () => {
       
       const { error } = await supabase.from("donations").insert({
         user_id: user.id,
-        amount: numAmount,
-        message,
+        amount,
         is_anonymous: isAnonymous,
         api_balance_allocation: allocations.api,
         bounties_allocation: allocations.bounties,
@@ -75,8 +91,9 @@ const DonationForm = () => {
       if (error) throw error;
 
       toast.success("Thank you for your donation!");
-      setAmount("");
-      setMessage("");
+      setSelectedAmount("25");
+      setCustomAmount("");
+      setIsCustom(false);
       setIsAnonymous(false);
       setAllocations({ api: 50, bounties: 50, creator: 0 });
     } catch (error: any) {
@@ -87,21 +104,41 @@ const DonationForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
-      <div className="space-y-2">
-        <Label htmlFor="amount">Amount (USD)</Label>
-        <Input
-          id="amount"
-          type="number"
-          step="0.01"
-          min="0.01"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="Enter amount"
-          required
-          className="bg-black/20"
-        />
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {PRESET_AMOUNTS.map((amount) => (
+          <button
+            key={amount.value}
+            type="button"
+            onClick={() => handleAmountSelect(amount.value)}
+            className={cn(
+              "h-12 px-4 rounded-lg border transition-colors",
+              selectedAmount === amount.value
+                ? "border-primary bg-primary/10"
+                : "border-input hover:border-primary"
+            )}
+          >
+            {amount.label}
+          </button>
+        ))}
       </div>
+
+      {isCustom && (
+        <div className="space-y-2">
+          <Label htmlFor="customAmount">Custom Amount (USD)</Label>
+          <Input
+            id="customAmount"
+            type="number"
+            step="0.01"
+            min="0.01"
+            value={customAmount}
+            onChange={(e) => setCustomAmount(e.target.value)}
+            placeholder="Enter amount"
+            required
+            className="bg-black/20"
+          />
+        </div>
+      )}
 
       <div className="space-y-4">
         <Label>Allocation</Label>
@@ -150,17 +187,6 @@ const DonationForm = () => {
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="message">Message (optional)</Label>
-        <Textarea
-          id="message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Leave a message with your donation"
-          className="bg-black/20 min-h-[100px]"
-        />
-      </div>
-
       <div className="flex items-center space-x-2">
         <Switch
           id="anonymous"
@@ -173,9 +199,9 @@ const DonationForm = () => {
       <Button 
         type="submit" 
         disabled={isSubmitting || !user}
-        className="w-32 bg-white/10 hover:bg-white/20"
+        className="w-full bg-primary hover:bg-primary/90"
       >
-        {isSubmitting ? "Processing..." : "Donate"}
+        {isSubmitting ? "Processing..." : "Continue"}
       </Button>
     </form>
   );
@@ -186,10 +212,7 @@ const Donations = () => {
     <div className="container mx-auto py-8 px-4">
       <div className="max-w-xl mx-auto">
         <h1 className="text-3xl font-bold text-center mb-8">Support the Project</h1>
-        <div>
-          <h2 className="text-xl font-semibold text-center mb-8">Make a Donation</h2>
-          <DonationForm />
-        </div>
+        <DonationForm />
       </div>
     </div>
   );
