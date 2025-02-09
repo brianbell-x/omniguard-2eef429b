@@ -41,7 +41,7 @@ const ChatMessage = ({ content, isUser, animate = true }: ChatMessageProps) => {
     >
       <div
         className={cn(
-          "max-w-[80%]",
+          "max-w-[80%] rounded-2xl overflow-hidden",
           isUser
             ? "bg-white/10 text-white glass-morphism"
             : "bg-white/5 text-white/90 neo-blur"
