@@ -31,7 +31,20 @@ const HumanVerification = () => {
         .order('reported_at', { ascending: false });
 
       if (error) throw error;
-      setConversations(data);
+      
+      // Validate and transform the data to ensure it matches ReportedConversation type
+      const validatedData: ReportedConversation[] = (data || []).map(item => ({
+        ...item,
+        status: item.status as ReportedConversation['status'], // This ensures status is one of the allowed values
+        id: String(item.id),
+        user_id: String(item.user_id),
+        total_votes: Number(item.total_votes) || 0,
+        user_violation_votes: Number(item.user_violation_votes) || 0,
+        assistant_violation_votes: Number(item.assistant_violation_votes) || 0,
+        safe_votes: Number(item.safe_votes) || 0,
+      }));
+
+      setConversations(validatedData);
     } catch (error: any) {
       toast({
         title: "Error fetching conversations",
