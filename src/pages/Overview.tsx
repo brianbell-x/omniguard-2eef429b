@@ -1,8 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { LayoutDashboard, Settings, Shield, FileText, Info, Database, Download, ChevronDown } from "lucide-react";
+import { Shield } from "lucide-react";
+import Sidebar from "@/components/overview/Sidebar";
+import ProjectStats from "@/components/overview/ProjectStats";
+import ConfigurationSection from "@/components/overview/ConfigurationSection";
+import DatasetSection from "@/components/overview/DatasetSection";
+import ProjectInfo from "@/components/overview/ProjectInfo";
 
 const Overview = () => {
   const stats = [
@@ -11,45 +14,6 @@ const Overview = () => {
     { label: "Assistant Rejections", value: "32K" },
     { label: "Avg. Latency", value: "280ms" },
   ];
-
-  const datasetExample = `{
-  "conversation_id": "Unique identifier for this evaluation instance",
-  "omniguard_evaluation_input": {
-    "configuration": "<configuration>Safety configuration with rules and instructions</configuration>",
-    "conversation": "<input><![CDATA[{
-      \\"id\\": \\"string\\",
-      \\"messages\\": [
-        {\\"role\\": \\"system\\", \\"content\\": \\"\\"},
-        {\\"role\\": \\"user\\", \\"content\\": \\"\\"},
-        {\\"role\\": \\"assistant\\", \\"content\\": \\"\\"}
-      ]
-    }]]></input>"
-  },
-  "omniguard_raw_response": {
-    "conversation_id": "string",
-    "analysisSummary": "Short note on triggered rules or 'No violations'.",
-    "response": {
-      "action": "allow | UserInputRejection | AssistantOutputRejection",
-      "UserInputRejection": "string",
-      "AssistantOutputRejection": "string"
-    }
-  },
-  "assistant_output": "Final response from assistant (if OmniGuard allowed the content)",
-  "user_violates_rules": true,
-  "assistant_violates_rules": false,
-  "model_name": "Model used for OmniGuard evaluation",
-  "reasoning_effort": "Level of reasoning effort applied",
-  "contributor": "Who contributed this data point",
-  "created_at": "2024-02-07T13:30:03.123Z",
-  "prompt_tokens": 0,
-  "completion_tokens": 0,
-  "total_tokens": 0,
-  "input_cost": 0.0000,
-  "output_cost": 0.0000,
-  "total_cost": 0.0000,
-  "latency_ms": 0,
-  "needed_human_verification": false
-}`;
 
   const configurationXml = `<configuration>
   <purpose>
@@ -91,30 +55,49 @@ const Overview = () => {
   </format>
 </configuration>`;
 
+  const datasetExample = `{
+  "conversation_id": "Unique identifier for this evaluation instance",
+  "omniguard_evaluation_input": {
+    "configuration": "<configuration>Safety configuration with rules and instructions</configuration>",
+    "conversation": "<input><![CDATA[{
+      \\"id\\": \\"string\\",
+      \\"messages\\": [
+        {\\"role\\": \\"system\\", \\"content\\": \\"\\"},
+        {\\"role\\": \\"user\\", \\"content\\": \\"\\"},
+        {\\"role\\": \\"assistant\\", \\"content\\": \\"\\"}
+      ]
+    }]]></input>"
+  },
+  "omniguard_raw_response": {
+    "conversation_id": "string",
+    "analysisSummary": "Short note on triggered rules or 'No violations'.",
+    "response": {
+      "action": "allow | UserInputRejection | AssistantOutputRejection",
+      "UserInputRejection": "string",
+      "AssistantOutputRejection": "string"
+    }
+  },
+  "assistant_output": "Final response from assistant (if OmniGuard allowed the content)",
+  "user_violates_rules": true,
+  "assistant_violates_rules": false,
+  "model_name": "Model used for OmniGuard evaluation",
+  "reasoning_effort": "Level of reasoning effort applied",
+  "contributor": "Who contributed this data point",
+  "created_at": "2024-02-07T13:30:03.123Z",
+  "prompt_tokens": 0,
+  "completion_tokens": 0,
+  "total_tokens": 0,
+  "input_cost": 0.0000,
+  "output_cost": 0.0000,
+  "total_cost": 0.0000,
+  "latency_ms": 0,
+  "needed_human_verification": false
+}`;
+
   return (
     <div className="min-h-screen bg-background">
       <div className="flex">
-        <div className="w-64 h-[calc(100vh-3.5rem)] border-r border-white/10 p-4 hidden lg:block">
-          <nav className="space-y-2">
-            <a href="#overview" className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-white/5 transition-colors">
-              <LayoutDashboard className="w-4 h-4" />
-              Overview
-            </a>
-            <a href="#configuration" className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-white/5 transition-colors">
-              <Settings className="w-4 h-4" />
-              Configuration
-            </a>
-            <a href="#dataset" className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-white/5 transition-colors">
-              <FileText className="w-4 h-4" />
-              Dataset
-            </a>
-            <a href="#info" className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-white/5 transition-colors">
-              <Info className="w-4 h-4" />
-              Project Info
-            </a>
-          </nav>
-        </div>
-
+        <Sidebar />
         <ScrollArea className="flex-1 h-[calc(100vh-3.5rem)]">
           <div className="max-w-6xl mx-auto p-6 space-y-8">
             <div className="space-y-2">
@@ -127,124 +110,10 @@ const Overview = () => {
               </p>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {stats.map((stat, index) => (
-                <Card key={index} className="bg-card/50 border-white/10">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">
-                      {stat.label}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-2xl font-bold">{stat.value}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            <section id="configuration" className="space-y-4">
-              <h2 className="text-2xl font-bold tracking-tight">Configuration</h2>
-              <Card className="bg-card/50 border-white/10">
-                <Collapsible>
-                  <CollapsibleTrigger className="w-full flex items-center justify-between p-6">
-                    <div className="flex items-center gap-2">
-                      <Settings className="w-5 h-5" />
-                      <span className="font-medium">View Configuration XML</span>
-                    </div>
-                    <ChevronDown className="w-4 h-4" />
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <CardContent>
-                      <pre className="bg-black/20 p-4 rounded-md overflow-x-auto text-sm">
-                        {configurationXml}
-                      </pre>
-                    </CardContent>
-                  </CollapsibleContent>
-                </Collapsible>
-              </Card>
-            </section>
-
-            <section id="dataset" className="space-y-4">
-              <h2 className="text-2xl font-bold tracking-tight">Dataset</h2>
-              <Card className="bg-card/50 border-white/10">
-                <CardContent className="p-6 space-y-4">
-                  <div className="flex justify-between items-center">
-                    <div className="space-y-1">
-                      <h3 className="font-medium">Download Complete Dataset</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Access the full conversation dataset in JSONL format
-                      </p>
-                    </div>
-                    <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md bg-white/10 hover:bg-white/20 transition-colors">
-                      <Download className="w-4 h-4" />
-                      Download
-                    </button>
-                  </div>
-
-                  <Collapsible className="space-y-2">
-                    <CollapsibleTrigger className="flex items-center gap-2 text-sm font-medium hover:underline">
-                      <ChevronDown className="w-4 h-4" />
-                      View Dataset Format Example
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <div className="mt-2 p-4 bg-black/20 rounded-md">
-                        <pre className="text-xs overflow-x-auto whitespace-pre">
-                          {datasetExample}
-                        </pre>
-                      </div>
-                    </CollapsibleContent>
-                  </Collapsible>
-                </CardContent>
-              </Card>
-            </section>
-
-            <section id="info" className="space-y-4">
-              <h2 className="text-2xl font-bold tracking-tight">Project Information</h2>
-              <div className="grid gap-4 md:grid-cols-2">
-                <Card className="bg-card/50 border-white/10">
-                  <CardHeader>
-                    <CardTitle>Development Timeline</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Start Date</span>
-                        <span>January 2024</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Development Phase</span>
-                        <span>3 months</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Testing Phase</span>
-                        <span>1 month</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="bg-card/50 border-white/10">
-                  <CardHeader>
-                    <CardTitle>Cost Metrics</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Development</span>
-                        <span>$75,000</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">API Usage</span>
-                        <span>$12,000/month</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Infrastructure</span>
-                        <span>$3,000/month</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </section>
+            <ProjectStats stats={stats} />
+            <ConfigurationSection configurationXml={configurationXml} />
+            <DatasetSection datasetExample={datasetExample} />
+            <ProjectInfo />
           </div>
         </ScrollArea>
       </div>
