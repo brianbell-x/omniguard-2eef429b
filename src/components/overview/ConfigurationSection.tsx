@@ -9,20 +9,20 @@ interface ConfigurationSectionProps {
 
 const ConfigurationSection = ({ configurationXml }: ConfigurationSectionProps) => {
   return (
-    <section id="configuration" className="space-y-4">
-      <h2 className="text-2xl font-bold tracking-tight">Configuration</h2>
+    <section id="configuration" className="space-y-6">
+      <h2 className="text-2xl font-semibold tracking-tight">Configuration</h2>
       <Card className="bg-card/50 border-white/10">
         <Collapsible>
           <CollapsibleTrigger className="w-full flex items-center justify-between p-6">
             <div className="flex items-center gap-2">
-              <Settings className="w-5 h-5" />
-              <span className="font-medium">View Configuration XML</span>
+              <Settings className="w-5 h-5 text-muted-foreground" />
+              <span className="font-medium text-sm">View Configuration XML</span>
             </div>
-            <ChevronDown className="w-4 h-4" />
+            <ChevronDown className="w-4 h-4 text-muted-foreground" />
           </CollapsibleTrigger>
           <CollapsibleContent>
             <CardContent>
-              <pre className="bg-black/20 p-4 rounded-md overflow-x-auto text-sm">
+              <pre className="bg-black/20 p-4 rounded-md overflow-x-auto text-xs text-muted-foreground/90">
                 {configurationXml}
               </pre>
             </CardContent>
