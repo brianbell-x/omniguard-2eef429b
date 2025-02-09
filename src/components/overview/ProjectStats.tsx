@@ -23,10 +23,10 @@ const ProjectStats = ({ stats }: ProjectStatsProps) => {
                      border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] 
                      transition-all duration-200"
           >
-            <span className="text-sm font-medium text-gray-300 mb-2">
+            <span className="text-sm font-medium text-foreground/80 mb-2">
               {stat.label}
             </span>
-            <span className="font-bold text-lg tracking-tight text-gray-100">
+            <span className="font-bold text-lg tracking-tight text-foreground">
               {stat.value}
             </span>
           </div>

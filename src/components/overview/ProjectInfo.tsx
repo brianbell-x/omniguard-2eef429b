@@ -1,73 +1,56 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import SectionContainer from "@/components/ui/section-container";
 
 const ProjectInfo = () => {
   return (
-    <section 
-      id="info" 
-      className="space-y-6"
-      aria-label="Project timeline and cost information"
-    >
-      <div className="flex items-center gap-2">
-        <h2 className="text-2xl font-semibold tracking-tight text-white">Project Information</h2>
-        <span className="text-sm text-gray-300">Overview of timeline and costs</span>
-      </div>
-      
+    <SectionContainer title="Project Info">
       <div className="grid gap-6 md:grid-cols-2">
-        <Card 
-          className="bg-card/50 border-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:bg-card/60"
-          role="region"
-          aria-labelledby="timeline-title"
-        >
+        <Card className="bg-card/50 border-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:bg-card/60">
           <CardHeader className="space-y-2">
-            <CardTitle id="timeline-title" className="text-lg font-medium text-white">Development Timeline</CardTitle>
+            <CardTitle className="text-lg font-medium">Development Timeline</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between group cursor-default">
-                <span className="text-[#38BDF8] transition-colors duration-200 group-hover:text-[#60CDFF]">Start Date</span>
-                <span className="text-gray-100 transition-colors duration-200 group-hover:text-white">January 2024</span>
+                <span className="text-primary transition-colors duration-200 group-hover:text-primary/90">Start Date</span>
+                <span className="text-foreground transition-colors duration-200 group-hover:text-foreground/90">January 2024</span>
               </div>
               <div className="flex justify-between group cursor-default">
-                <span className="text-[#38BDF8] transition-colors duration-200 group-hover:text-[#60CDFF]">Development Phase</span>
-                <span className="text-gray-100 transition-colors duration-200 group-hover:text-white">3 months</span>
+                <span className="text-primary transition-colors duration-200 group-hover:text-primary/90">Development Phase</span>
+                <span className="text-foreground transition-colors duration-200 group-hover:text-foreground/90">3 months</span>
               </div>
               <div className="flex justify-between group cursor-default">
-                <span className="text-[#38BDF8] transition-colors duration-200 group-hover:text-[#60CDFF]">Testing Phase</span>
-                <span className="text-gray-100 transition-colors duration-200 group-hover:text-white">1 month</span>
+                <span className="text-primary transition-colors duration-200 group-hover:text-primary/90">Testing Phase</span>
+                <span className="text-foreground transition-colors duration-200 group-hover:text-foreground/90">1 month</span>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card 
-          className="bg-card/50 border-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:bg-card/60"
-          role="region"
-          aria-labelledby="cost-title"
-        >
+        <Card className="bg-card/50 border-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:bg-card/60">
           <CardHeader className="space-y-2">
-            <CardTitle id="cost-title" className="text-lg font-medium text-white">Cost Metrics</CardTitle>
+            <CardTitle className="text-lg font-medium">Cost Metrics</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between group cursor-default">
-                <span className="text-[#38BDF8] transition-colors duration-200 group-hover:text-[#60CDFF]">Development</span>
-                <span className="text-gray-100 transition-colors duration-200 group-hover:text-white">$75,000</span>
+                <span className="text-primary transition-colors duration-200 group-hover:text-primary/90">Development</span>
+                <span className="text-foreground transition-colors duration-200 group-hover:text-foreground/90">$75,000</span>
               </div>
               <div className="flex justify-between group cursor-default">
-                <span className="text-[#38BDF8] transition-colors duration-200 group-hover:text-[#60CDFF]">API Usage</span>
-                <span className="text-gray-100 transition-colors duration-200 group-hover:text-white">$12,000/month</span>
+                <span className="text-primary transition-colors duration-200 group-hover:text-primary/90">API Usage</span>
+                <span className="text-foreground transition-colors duration-200 group-hover:text-foreground/90">$12,000/month</span>
               </div>
               <div className="flex justify-between group cursor-default">
-                <span className="text-[#38BDF8] transition-colors duration-200 group-hover:text-[#60CDFF]">Infrastructure</span>
-                <span className="text-gray-100 transition-colors duration-200 group-hover:text-white">$3,000/month</span>
+                <span className="text-primary transition-colors duration-200 group-hover:text-primary/90">Infrastructure</span>
+                <span className="text-foreground transition-colors duration-200 group-hover:text-foreground/90">$3,000/month</span>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
-    </section>
+    </SectionContainer>
   );
 };
 
 export default ProjectInfo;
-

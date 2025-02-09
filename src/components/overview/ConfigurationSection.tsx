@@ -2,6 +2,7 @@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown, Settings, Copy } from "lucide-react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import SectionContainer from "@/components/ui/section-container";
 
 interface ConfigurationSectionProps {
@@ -19,24 +20,28 @@ const ConfigurationSection = ({ configurationXml }: ConfigurationSectionProps) =
   };
 
   return (
-    <SectionContainer title="Configuration">
+    <SectionContainer title="Config">
       <Collapsible>
-        <CollapsibleTrigger className="w-full flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Settings className="w-5 h-5 text-[#38BDF8]" />
-            <span className="font-medium text-sm text-gray-100">View Configuration XML</span>
-          </div>
-          <ChevronDown className="w-4 h-4 text-[#38BDF8]" />
+        <CollapsibleTrigger className="w-full">
+          <Button variant="ghost" className="w-full flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Settings className="w-5 h-5 text-primary" />
+              <span className="font-medium text-sm">View Configuration XML</span>
+            </div>
+            <ChevronDown className="w-4 h-4" />
+          </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="relative">
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={handleCopy}
-            className="absolute top-4 right-4 p-2 rounded-md hover:bg-white/10 transition-colors"
+            className="absolute top-4 right-4"
             title="Copy to clipboard"
           >
             <Copy className="w-4 h-4" />
-          </button>
-          <pre className="mt-4 bg-black/20 p-4 rounded-md overflow-x-auto text-xs text-gray-300">
+          </Button>
+          <pre className="mt-4 bg-black/20 p-4 rounded-md overflow-x-auto text-xs text-foreground/90">
             {configurationXml}
           </pre>
         </CollapsibleContent>

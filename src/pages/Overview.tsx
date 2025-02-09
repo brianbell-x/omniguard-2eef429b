@@ -95,25 +95,23 @@ const Overview = () => {
   return (
     <div className="min-h-screen bg-background">
       <ScrollArea className="h-[calc(100vh-3.5rem)]">
-        <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-12 md:space-y-16">
-          <div className="space-y-8">
+        <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
+          <div className="space-y-6">
             <div className="flex items-center gap-2 justify-center">
-              <Shield className="w-8 h-8 md:w-10 md:h-10 text-[#38BDF8]" />
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-100 text-balance">
+              <Shield className="w-8 h-8 md:w-10 md:h-10 text-primary" />
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground text-balance">
                 OmniGuard - Conversation Moderation System (BETA)
               </h1>
             </div>
-            <div className="flex flex-col gap-6 md:gap-8 items-center justify-center">
-              <p className="text-base text-gray-100 max-w-[600px] text-center leading-relaxed">
-                A reasoning based conversation moderation system for text-based LLM interactions. 
-                The system effectively mitigates the majority of potential violations and attacks 
-                through its comprehensive rule set and reasoning-based approach.
+            <div className="flex flex-col gap-6 items-center justify-center">
+              <p className="text-base text-foreground text-center leading-relaxed">
+                Reasoning-based moderation for text-based LLM interactions. Mitigates most violations with a robust rule set.
               </p>
               <ProjectStats stats={stats} />
             </div>
           </div>
           
-          <div className="space-y-12 md:space-y-16">
+          <div className="space-y-6">
             <ConfigurationSection configurationXml={configurationXml} />
             <DatasetSection datasetExample={datasetExample} />
             <ProjectInfo />
