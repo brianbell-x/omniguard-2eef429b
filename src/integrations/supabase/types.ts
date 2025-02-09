@@ -9,6 +9,69 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      contributor_stats: {
+        Row: {
+          assistant_rejections: number | null
+          created_at: string
+          id: string
+          success_rate: number | null
+          total_contributions: number | null
+          updated_at: string
+          user_id: string | null
+          verified_harmful_prompts: number | null
+        }
+        Insert: {
+          assistant_rejections?: number | null
+          created_at?: string
+          id?: string
+          success_rate?: number | null
+          total_contributions?: number | null
+          updated_at?: string
+          user_id?: string | null
+          verified_harmful_prompts?: number | null
+        }
+        Update: {
+          assistant_rejections?: number | null
+          created_at?: string
+          id?: string
+          success_rate?: number | null
+          total_contributions?: number | null
+          updated_at?: string
+          user_id?: string | null
+          verified_harmful_prompts?: number | null
+        }
+        Relationships: []
+      }
+      donor_stats: {
+        Row: {
+          created_at: string
+          id: string
+          is_anonymous: boolean | null
+          last_donation_date: string | null
+          total_donated: number | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_anonymous?: boolean | null
+          last_donation_date?: string | null
+          total_donated?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_anonymous?: boolean | null
+          last_donation_date?: string | null
+          total_donated?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
