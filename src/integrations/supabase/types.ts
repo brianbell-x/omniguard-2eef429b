@@ -45,31 +45,43 @@ export type Database = {
       donations: {
         Row: {
           amount: number
+          api_balance_allocation: number | null
+          bounties_allocation: number | null
           created_at: string
+          creator_allocation: number | null
           currency: string
           id: string
           is_anonymous: boolean | null
           message: string | null
+          stripe_payment_id: string | null
           updated_at: string
           user_id: string | null
         }
         Insert: {
           amount: number
+          api_balance_allocation?: number | null
+          bounties_allocation?: number | null
           created_at?: string
+          creator_allocation?: number | null
           currency?: string
           id?: string
           is_anonymous?: boolean | null
           message?: string | null
+          stripe_payment_id?: string | null
           updated_at?: string
           user_id?: string | null
         }
         Update: {
           amount?: number
+          api_balance_allocation?: number | null
+          bounties_allocation?: number | null
           created_at?: string
+          creator_allocation?: number | null
           currency?: string
           id?: string
           is_anonymous?: boolean | null
           message?: string | null
+          stripe_payment_id?: string | null
           updated_at?: string
           user_id?: string | null
         }
