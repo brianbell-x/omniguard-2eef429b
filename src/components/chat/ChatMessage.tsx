@@ -24,7 +24,11 @@ const ChatMessage = ({
   content, 
   isUser, 
   animate = true,
-  safetyAssessment = { safe: true }
+  // Default all messages to unsafe for testing the UI feedback
+  safetyAssessment = { 
+    safe: false,
+    reason: 'Test message - all messages are marked unsafe by default for testing'
+  }
 }: ChatMessageProps) => {
   const messageRef = useRef<HTMLDivElement>(null);
 
