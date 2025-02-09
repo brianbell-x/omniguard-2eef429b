@@ -6,12 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Navigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Auth = () => {
   const { user, signIn, signUp } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -22,10 +24,15 @@ const Auth = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    
     try {
       if (isLogin) {
         await signIn(email, password);
       } else {
+        if (password !== passwordConfirm) {
+          toast.error("Passwords do not match");
+          return;
+        }
         await signUp(email, password, username);
       }
     } catch (error) {
@@ -69,16 +76,28 @@ const Auth = () => {
               />
             </div>
             {!isLogin && (
-              <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
-                <Input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </div>
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="passwordConfirm">Confirm Password</Label>
+                  <Input
+                    id="passwordConfirm"
+                    type="password"
+                    value={passwordConfirm}
+                    onChange={(e) => setPasswordConfirm(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="username">Username</Label>
+                  <Input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
+                </div>
+              </>
             )}
             <Button type="submit" className="w-full" disabled={loading}>
               {loading
@@ -90,7 +109,11 @@ const Auth = () => {
           </form>
           <div className="mt-4 text-center">
             <button
-              onClick={() => setIsLogin(!isLogin)}
+              onClick={() => {
+                setIsLogin(!isLogin);
+                setPassword("");
+                setPasswordConfirm("");
+              }}
               className="text-sm text-primary hover:underline"
             >
               {isLogin
