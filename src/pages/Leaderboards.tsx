@@ -55,13 +55,13 @@ const Leaderboards = () => {
   }));
 
   return (
-    <div className="h-[calc(100vh-56px)] bg-background">
+    <div className="min-h-[calc(100vh-56px)] bg-background">
       <ScrollArea className="h-full">
-        <div className="p-6">
-          <div className="max-w-6xl mx-auto space-y-8 pb-6">
+        <div className="p-4 md:p-6">
+          <div className="max-w-6xl mx-auto space-y-6 md:space-y-8">
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-2">
-                <Trophy className="w-8 h-8" />
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white flex items-center gap-2">
+                <Trophy className="w-6 h-6 md:w-8 md:h-8" />
                 Leaderboards
               </h1>
               <p className="text-muted-foreground">
@@ -69,18 +69,18 @@ const Leaderboards = () => {
               </p>
             </div>
 
-            <Tabs defaultValue="contributors" className="space-y-4">
+            <Tabs defaultValue="contributors" className="space-y-6">
               <TabsList>
                 <TabsTrigger value="contributors">Contributors</TabsTrigger>
                 <TabsTrigger value="donors">Donors</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="contributors" className="space-y-4">
+              <TabsContent value="contributors" className="space-y-6">
                 <div className="grid gap-4 md:grid-cols-2">
-                  <Card className="bg-card/50 border-white/10">
+                  <Card className="bg-card border-white/10">
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Users className="w-5 h-5" />
+                      <CardTitle className="flex items-center gap-2 text-base">
+                        <Users className="w-4 h-4" />
                         Total Contributors
                       </CardTitle>
                     </CardHeader>
@@ -89,10 +89,10 @@ const Leaderboards = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-card/50 border-white/10">
+                  <Card className="bg-card border-white/10">
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Award className="w-5 h-5" />
+                      <CardTitle className="flex items-center gap-2 text-base">
+                        <Award className="w-4 h-4" />
                         Total Verified Harmful Prompts
                       </CardTitle>
                     </CardHeader>
@@ -104,19 +104,19 @@ const Leaderboards = () => {
                   </Card>
                 </div>
 
-                <Card className="bg-card/50 border-white/10">
+                <Card className="bg-card border-white/10">
                   <CardHeader>
                     <CardTitle>Contribution Metrics</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="h-[400px]">
+                    <div className="h-[300px] md:h-[400px]">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={chartData}>
                           <CartesianGrid strokeDasharray="3 3" />
                           <XAxis dataKey="name" />
                           <YAxis />
                           <RechartsTooltip />
-                          <Legend />
+                          <Legend wrapperStyle={{ display: window.innerWidth < 768 ? 'none' : 'block' }} />
                           <Bar dataKey="Verified Harmful" fill="#4ADE80" />
                           <Bar dataKey="Assistant Rejections" fill="#FB923C" />
                         </BarChart>
@@ -125,14 +125,14 @@ const Leaderboards = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-card/50 border-white/10">
+                <Card className="bg-card border-white/10">
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       Top Contributors
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
-                            <HelpCircle className="w-5 h-5" />
+                            <HelpCircle className="w-4 h-4" />
                           </TooltipTrigger>
                           <TooltipContent>
                             <p>Success rate is calculated as the percentage of verified harmful prompts out of total contributions</p>
@@ -142,40 +142,42 @@ const Leaderboards = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Rank</TableHead>
-                          <TableHead>Contributor</TableHead>
-                          <TableHead>Verified Harmful</TableHead>
-                          <TableHead>Assistant Rejections</TableHead>
-                          <TableHead>Total</TableHead>
-                          <TableHead>Success Rate</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {contributors.map((contributor, index) => (
-                          <TableRow key={contributor.id}>
-                            <TableCell>{index + 1}</TableCell>
-                            <TableCell>User {contributor.user_id.slice(0, 8)}</TableCell>
-                            <TableCell>{contributor.verified_harmful_prompts}</TableCell>
-                            <TableCell>{contributor.assistant_rejections}</TableCell>
-                            <TableCell>{contributor.total_contributions}</TableCell>
-                            <TableCell>{contributor.success_rate.toFixed(1)}%</TableCell>
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Rank</TableHead>
+                            <TableHead>Contributor</TableHead>
+                            <TableHead className="hidden md:table-cell">Verified Harmful</TableHead>
+                            <TableHead className="hidden md:table-cell">Assistant Rejections</TableHead>
+                            <TableHead>Total</TableHead>
+                            <TableHead>Success Rate</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                        </TableHeader>
+                        <TableBody>
+                          {contributors.map((contributor, index) => (
+                            <TableRow key={contributor.id} className="hover:bg-white/5">
+                              <TableCell>{index + 1}</TableCell>
+                              <TableCell>User {contributor.user_id.slice(0, 8)}</TableCell>
+                              <TableCell className="hidden md:table-cell">{contributor.verified_harmful_prompts}</TableCell>
+                              <TableCell className="hidden md:table-cell">{contributor.assistant_rejections}</TableCell>
+                              <TableCell>{contributor.total_contributions}</TableCell>
+                              <TableCell>{contributor.success_rate.toFixed(1)}%</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
 
-              <TabsContent value="donors" className="space-y-4">
+              <TabsContent value="donors" className="space-y-6">
                 <div className="grid gap-4 md:grid-cols-2">
-                  <Card className="bg-card/50 border-white/10">
+                  <Card className="bg-card border-white/10">
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Users className="w-5 h-5" />
+                      <CardTitle className="flex items-center gap-2 text-base">
+                        <Users className="w-4 h-4" />
                         Total Donors
                       </CardTitle>
                     </CardHeader>
@@ -184,10 +186,10 @@ const Leaderboards = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-card/50 border-white/10">
+                  <Card className="bg-card border-white/10">
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <DollarSign className="w-5 h-5" />
+                      <CardTitle className="flex items-center gap-2 text-base">
+                        <DollarSign className="w-4 h-4" />
                         Total Donations
                       </CardTitle>
                     </CardHeader>
@@ -199,14 +201,14 @@ const Leaderboards = () => {
                   </Card>
                 </div>
 
-                <Card className="bg-card/50 border-white/10">
+                <Card className="bg-card border-white/10">
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       Top Donors
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
-                            <HelpCircle className="w-5 h-5" />
+                            <HelpCircle className="w-4 h-4" />
                           </TooltipTrigger>
                           <TooltipContent>
                             <p>Supporting prize pools, API costs, and research initiatives</p>
@@ -216,32 +218,34 @@ const Leaderboards = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Rank</TableHead>
-                          <TableHead>Donor</TableHead>
-                          <TableHead>Total Donated</TableHead>
-                          <TableHead>Last Donation</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {donors.map((donor, index) => (
-                          <TableRow key={donor.id}>
-                            <TableCell>{index + 1}</TableCell>
-                            <TableCell>
-                              {donor.is_anonymous ? "Anonymous" : `User ${donor.user_id.slice(0, 8)}`}
-                            </TableCell>
-                            <TableCell>${donor.total_donated.toLocaleString()}</TableCell>
-                            <TableCell>
-                              {donor.last_donation_date
-                                ? new Date(donor.last_donation_date).toLocaleDateString()
-                                : "N/A"}
-                            </TableCell>
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Rank</TableHead>
+                            <TableHead>Donor</TableHead>
+                            <TableHead>Total Donated</TableHead>
+                            <TableHead className="hidden md:table-cell">Last Donation</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                        </TableHeader>
+                        <TableBody>
+                          {donors.map((donor, index) => (
+                            <TableRow key={donor.id} className="hover:bg-white/5">
+                              <TableCell>{index + 1}</TableCell>
+                              <TableCell>
+                                {donor.is_anonymous ? "Anonymous" : `User ${donor.user_id.slice(0, 8)}`}
+                              </TableCell>
+                              <TableCell>${donor.total_donated.toLocaleString()}</TableCell>
+                              <TableCell className="hidden md:table-cell">
+                                {donor.last_donation_date
+                                  ? new Date(donor.last_donation_date).toLocaleDateString()
+                                  : "N/A"}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -254,3 +258,4 @@ const Leaderboards = () => {
 };
 
 export default Leaderboards;
+
