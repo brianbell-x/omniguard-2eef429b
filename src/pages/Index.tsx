@@ -13,11 +13,9 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSendMessage = async (content: string) => {
-    // Add user message
     setMessages((prev) => [...prev, { content, isUser: true }]);
     setIsLoading(true);
 
-    // Simulate API call
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
@@ -31,7 +29,7 @@ const Index = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-[calc(100vh-3.5rem)] bg-background">
       <main className="flex-1 overflow-y-auto px-4 py-4">
         <div className="max-w-3xl mx-auto">
           {messages.map((message, index) => (
