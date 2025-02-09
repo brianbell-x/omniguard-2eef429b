@@ -25,7 +25,7 @@ export const AllocationSliders = ({
       <div className="space-y-2">
         <div className="flex justify-between">
           <span>API Balance</span>
-          <span>${getAllocatedAmount(currentAmount, allocations.api)} ({allocations.api}%)</span>
+          <span>${getAllocatedAmount(currentAmount, allocations.api)}</span>
         </div>
         <Slider
           value={[allocations.api]}
@@ -39,7 +39,7 @@ export const AllocationSliders = ({
       <div className="space-y-2">
         <div className="flex justify-between">
           <span>Bounties</span>
-          <span>${getAllocatedAmount(currentAmount, allocations.bounties)} ({allocations.bounties}%)</span>
+          <span>${getAllocatedAmount(currentAmount, allocations.bounties)}</span>
         </div>
         <Slider
           value={[allocations.bounties]}
@@ -53,7 +53,7 @@ export const AllocationSliders = ({
       <div className="space-y-2">
         <div className="flex justify-between">
           <span>Creator</span>
-          <span>${getAllocatedAmount(currentAmount, allocations.creator)} ({allocations.creator}%)</span>
+          <span>${getAllocatedAmount(currentAmount, allocations.creator)}</span>
         </div>
         <Slider
           value={[allocations.creator]}
