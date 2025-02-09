@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -51,6 +50,46 @@ const Overview = () => {
   "latency_ms": 0,
   "needed_human_verification": false
 }`;
+
+  const configurationXml = `<configuration>
+  <purpose>
+    Defines OmniGuard as a reasoning-based moderation layer that evaluates and safeguards 
+    conversational content. The safety configuration is injected into the system to prime 
+    OmniGuard with all necessary guidelines and behavioral protocols before any messages 
+    are processed.
+  </purpose>
+  <instructions>
+    <instruction>Evaluate all incoming messages against defined safety rules</instruction>
+    <instruction>Handle ambiguous cases with conservative judgment</instruction>
+    <instruction>Generate appropriate rejection messages when needed</instruction>
+    <instruction>Maintain conversational context during evaluation</instruction>
+  </instructions>
+  <rules>
+    <group id="content-safety">
+      <rule id="CS001">Prevent harmful or malicious content</rule>
+      <rule id="CS002">Filter explicit or inappropriate material</rule>
+      <rule id="CS003">Block potential security threats</rule>
+    </group>
+    <group id="user-protection">
+      <rule id="UP001">Protect user privacy and personal information</rule>
+      <rule id="UP002">Prevent harassment and bullying</rule>
+      <rule id="UP003">Maintain professional communication standards</rule>
+    </group>
+  </rules>
+  <format>
+    <response_types>
+      <type>allow</type>
+      <type>UserInputRejection</type>
+      <type>AssistantOutputRejection</type>
+    </response_types>
+    <structure>
+      <field>conversation_id</field>
+      <field>timestamp</field>
+      <field>evaluation_result</field>
+      <field>action_taken</field>
+    </structure>
+  </format>
+</configuration>`;
 
   return (
     <div className="min-h-screen bg-background">
@@ -105,76 +144,24 @@ const Overview = () => {
 
             <section id="configuration" className="space-y-4">
               <h2 className="text-2xl font-bold tracking-tight">Configuration</h2>
-              <Tabs defaultValue="purpose" className="w-full">
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="purpose">Purpose</TabsTrigger>
-                  <TabsTrigger value="instructions">Instructions</TabsTrigger>
-                  <TabsTrigger value="rules">Rules</TabsTrigger>
-                  <TabsTrigger value="format">Format</TabsTrigger>
-                </TabsList>
-                <TabsContent value="purpose" className="mt-4">
-                  <Card className="bg-card/50 border-white/10">
-                    <CardContent className="p-6">
-                      <p className="text-sm text-muted-foreground">
-                        Clearly defines OmniGuard as a reasoning-based moderation layer that evaluates and safeguards conversational content. The safety configuration is injected into the system to prime OmniGuard with all necessary guidelines and behavioral protocols before any messages are processed.
-                      </p>
+              <Card className="bg-card/50 border-white/10">
+                <Collapsible>
+                  <CollapsibleTrigger className="w-full flex items-center justify-between p-6">
+                    <div className="flex items-center gap-2">
+                      <Settings className="w-5 h-5" />
+                      <span className="font-medium">View Configuration XML</span>
+                    </div>
+                    <ChevronDown className="w-4 h-4" />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <CardContent>
+                      <pre className="bg-black/20 p-4 rounded-md overflow-x-auto text-sm">
+                        {configurationXml}
+                      </pre>
                     </CardContent>
-                  </Card>
-                </TabsContent>
-                <TabsContent value="instructions" className="mt-4">
-                  <Card className="bg-card/50 border-white/10">
-                    <CardContent className="p-6">
-                      <p className="text-sm text-muted-foreground">
-                        Detailed guidelines for evaluating messages, handling ambiguity, responding to violations, and maintaining conversational engagement. The configuration provides comprehensive instructions on message evaluation, violation handling, and engagement preservation.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                <TabsContent value="rules" className="mt-4">
-                  <Card className="bg-card/50 border-white/10">
-                    <CardContent className="p-6">
-                      <div className="space-y-4">
-                        <p className="text-sm text-muted-foreground">
-                          Each rule group includes a category and a list of specific rules. Each rule contains a unique identifier, description, and illustrative examples of its application.
-                        </p>
-                        <div className="text-sm bg-black/20 p-4 rounded-md font-mono overflow-x-auto">
-                          {`{
-  "group": "Content Safety",
-  "rules": [
-    {
-      "ruleId": "CS001",
-      "description": "Prevent harmful content",
-      "examples": ["..."]
-    }
-  ]
-}`}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-                <TabsContent value="format" className="mt-4">
-                  <Card className="bg-card/50 border-white/10">
-                    <CardContent className="p-6 space-y-6">
-                      <div className="space-y-2">
-                        <h3 className="font-medium">Configuration Format</h3>
-                        <div className="text-sm bg-black/20 p-4 rounded-md font-mono overflow-x-auto">
-                          {`{ "role": "developer", "content": {"type": "text", "text": "<CONFIGURATION>"} }
-{ "role": "user", "content": {"type": "text", "text": "<CONVERSATION>"} }`}
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <h3 className="font-medium">Actions</h3>
-                        <ul className="space-y-2 text-sm text-muted-foreground">
-                          <li><span className="font-medium">allow:</span> Proceeds normally if no violations are detected</li>
-                          <li><span className="font-medium">UserInputRejection:</span> Returns a succinct, neutral refusal for problematic user inputs</li>
-                          <li><span className="font-medium">AssistantOutputRejection:</span> Provides a sanitized or generic refusal for problematic assistant outputs</li>
-                        </ul>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-              </Tabs>
+                  </CollapsibleContent>
+                </Collapsible>
+              </Card>
             </section>
 
             <section id="dataset" className="space-y-4">
