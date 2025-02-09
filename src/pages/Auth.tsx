@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 
 const Auth = () => {
@@ -14,8 +14,10 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const location = useLocation();
 
-  if (user) {
+  // Only redirect if user is authenticated and not on verification page
+  if (user && location.pathname !== "/verify") {
     return <Navigate to="/" />;
   }
 
