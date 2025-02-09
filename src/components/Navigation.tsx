@@ -1,7 +1,7 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, MessageCircle, Settings, UserCheck, Trophy, LogOut } from "lucide-react";
+import { LayoutDashboard, MessageCircle, Settings, UserCheck, Trophy, Heart, LogOut } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "./ui/button";
 
@@ -15,6 +15,7 @@ const Navigation = () => {
     { href: "/configuration", label: "Configuration", icon: Settings },
     { href: "/verification", label: "Verification", icon: UserCheck },
     { href: "/leaderboards", label: "Leaderboards", icon: Trophy },
+    { href: "/donations", label: "Donations", icon: Heart },
   ];
 
   return (

@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import Configuration from "./pages/Configuration";
 import HumanVerification from "./pages/HumanVerification";
 import Leaderboards from "./pages/Leaderboards";
+import Donations from "./pages/Donations";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -31,6 +32,7 @@ const App = () => (
               <Route path="/configuration" element={<Configuration />} />
               <Route path="/verification" element={<HumanVerification />} />
               <Route path="/leaderboards" element={<Leaderboards />} />
+              <Route path="/donations" element={<Donations />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
