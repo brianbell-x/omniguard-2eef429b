@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// Removed useNavigate import since we no longer redirect unauthenticated users
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -13,7 +13,6 @@ import type { ReportedConversation, VerificationVote } from "@/types/verificatio
 
 const HumanVerification = () => {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const [conversations, setConversations] = useState<ReportedConversation[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedVoteType, setSelectedVoteType] = useState<VerificationVote['vote_type']>('safe');
@@ -34,7 +33,7 @@ const HumanVerification = () => {
       // Validate and transform the data to ensure it matches ReportedConversation type
       const validatedData: ReportedConversation[] = (data || []).map(item => ({
         ...item,
-        status: item.status as ReportedConversation['status'], // This ensures status is one of the allowed values
+        status: item.status as ReportedConversation['status'],
         id: String(item.id),
         user_id: String(item.user_id),
         total_votes: Number(item.total_votes) || 0,
@@ -59,6 +58,7 @@ const HumanVerification = () => {
     try {
       setSubmitting(true);
       
+      // Check for authentication only when submitting a vote
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('User not authenticated');
 
@@ -95,16 +95,10 @@ const HumanVerification = () => {
     }
   };
 
+  // Removed authentication check; now we simply fetch the conversations for everyone
   useEffect(() => {
-    // Check authentication
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (!user) {
-        navigate('/auth');
-        return;
-      }
-      fetchConversations();
-    });
-  }, [navigate]);
+    fetchConversations();
+  }, []);
 
   return (
     <div className="h-[calc(100vh-56px)] bg-background">
