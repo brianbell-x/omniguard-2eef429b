@@ -6,9 +6,100 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export type Database = {
+interface ConversationTurnRow {
+  id: string
+  messages: Json
+  user_violates_rules: boolean
+  assistant_violates_rules: boolean
+  usage: Json
+  request_timings: Json
+  cost: number
+  omniguard_response: Json | null
+  assistant_response: string | null
+  created_at: string
+}
+
+export interface Database {
   public: {
     Tables: {
+      conversations: {
+        Row: {
+          conversation_id: string
+          omniguard_evaluation_input: string
+          omniguard_raw_response: string
+          assistant_output: string
+          user_violates_rules: boolean
+          assistant_violates_rules: boolean
+          model_name: string
+          reasoning_effort: number
+          prompt_tokens: number
+          completion_tokens: number
+          total_tokens: number
+          input_cost: number
+          output_cost: number
+          total_cost: number
+          latency_ms: number
+          usage_data: Json
+          request_timings: Json
+          needed_human_verification?: boolean
+          human_verification?: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          conversation_id: string
+          omniguard_evaluation_input: string
+          omniguard_raw_response: string
+          assistant_output: string
+          user_violates_rules: boolean
+          assistant_violates_rules: boolean
+          model_name: string
+          reasoning_effort: number
+          prompt_tokens: number
+          completion_tokens: number
+          total_tokens: number
+          input_cost: number
+          output_cost: number
+          total_cost: number
+          latency_ms: number
+          usage_data: Json
+          request_timings: Json
+          needed_human_verification?: boolean
+          human_verification?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          conversation_id?: string
+          omniguard_evaluation_input?: string
+          omniguard_raw_response?: string
+          assistant_output?: string
+          user_violates_rules?: boolean
+          assistant_violates_rules?: boolean
+          model_name?: string
+          reasoning_effort?: number
+          prompt_tokens?: number
+          completion_tokens?: number
+          total_tokens?: number
+          input_cost?: number
+          output_cost?: number
+          total_cost?: number
+          latency_ms?: number
+          usage_data?: Json
+          request_timings?: Json
+          needed_human_verification?: boolean
+          human_verification?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      conversation_turns: {
+        Row: ConversationTurnRow
+        Insert: Omit<ConversationTurnRow, "id">
+        Update: Partial<ConversationTurnRow>
+        Relationships: []
+      }
       contributor_stats: {
         Row: {
           assistant_rejections: number | null
@@ -92,7 +183,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
       donor_stats: {
@@ -286,7 +377,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "reported_conversations"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
     }
@@ -323,14 +414,14 @@ export type Tables<
     ? R
     : never
   : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-        PublicSchema["Views"])
-    ? (PublicSchema["Tables"] &
-        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R
-      }
-      ? R
-      : never
+      PublicSchema["Views"])
+  ? (PublicSchema["Tables"] &
+      PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
     : never
+  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
@@ -346,12 +437,12 @@ export type TablesInsert<
     ? I
     : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Insert: infer I
-      }
-      ? I
-      : never
+  ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
     : never
+  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
@@ -367,12 +458,12 @@ export type TablesUpdate<
     ? U
     : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Update: infer U
-      }
-      ? U
-      : never
+  ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
     : never
+  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
@@ -384,8 +475,8 @@ export type Enums<
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
-    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
-    : never
+  ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+  : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
@@ -399,5 +490,5 @@ export type CompositeTypes<
 > = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
   ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
-    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
+  ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+  : never

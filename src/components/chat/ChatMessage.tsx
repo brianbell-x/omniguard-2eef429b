@@ -1,32 +1,28 @@
-
-import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils"
+import { useEffect, useRef, useState } from "react"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Flag, Pencil, Check, X } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
-
-type MessageStatus = "UserRejection" | "AssistantRejection" | "warning";
+} from "@/components/ui/tooltip"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Flag, Pencil, Check, X } from "lucide-react"
+import { Textarea } from "@/components/ui/textarea"
+import OmniGuardDetails from "./OmniGuardDetails"
+import { type OmniGuardResult } from "@/types/omniguard"
 
 interface ChatMessageProps {
-  content: string;
-  isUser: boolean;
-  animate?: boolean;
-  isEditing?: boolean;
-  edited?: boolean;
-  onEdit?: () => void;
-  onSave?: (content: string) => void;
-  onCancel?: () => void;
-  safetyAssessment?: {
-    safe: boolean;
-    reason?: string;
-  };
+  content: string
+  isUser: boolean
+  animate?: boolean
+  isEditing?: boolean
+  edited?: boolean
+  onEdit?: () => void
+  onSave?: (content: string) => void
+  onCancel?: () => void
+  omniguardResult?: OmniGuardResult
 }
 
 const ChatMessage = ({ 
@@ -38,48 +34,45 @@ const ChatMessage = ({
   onEdit,
   onSave,
   onCancel,
-  safetyAssessment = { 
-    safe: false,
-    reason: "Test message - all messages are marked unsafe by default for testing"
-  }
+  omniguardResult
 }: ChatMessageProps) => {
-  const messageRef = useRef<HTMLDivElement>(null);
-  const [tempContent, setTempContent] = useState(content);
-  const messageStatus: MessageStatus = !safetyAssessment.safe ? (isUser ? "UserRejection" : "AssistantRejection") : "warning";
+  const messageRef = useRef<HTMLDivElement>(null)
+  const [tempContent, setTempContent] = useState(content)
+  const isSafe = omniguardResult?.action === "Allow"
 
   useEffect(() => {
     if (messageRef.current) {
-      messageRef.current.scrollIntoView({ behavior: "smooth" });
+      messageRef.current.scrollIntoView({ behavior: "smooth" })
     }
-  }, [content]);
+  }, [content])
 
   useEffect(() => {
     if (isEditing) {
-      setTempContent(content);
+      setTempContent(content)
     }
-  }, [isEditing, content]);
+  }, [isEditing, content])
 
   const handleReport = () => {
-    console.log(`Reporting message: ${content}`);
-  };
+    console.log(`Reporting message: ${content}`)
+  }
 
   const handleSave = () => {
     if (onSave && tempContent.trim()) {
-      onSave(tempContent);
+      onSave(tempContent)
     }
-  };
+  }
 
-  const getStatusColor = (status: MessageStatus) => {
-    switch (status) {
-      case "UserRejection":
-      case "AssistantRejection":
-        return "outline outline-1 outline-destructive/30";
-      case "warning":
-        return "outline outline-1 outline-yellow-500/30";
+  const getStatusColor = (action?: OmniGuardResult["action"]) => {
+    switch (action) {
+      case "UserInputRejection":
+      case "AssistantOutputRejection":
+        return "outline outline-1 outline-destructive/30"
+      case "Allow":
+        return ""
       default:
-        return "";
+        return "outline outline-1 outline-yellow-500/30" // For undefined/loading state
     }
-  };
+  }
 
   return (
     <div
@@ -96,7 +89,7 @@ const ChatMessage = ({
           isUser
             ? "bg-white/10 text-white glass-morphism"
             : "bg-white/5 text-white/90 neo-blur",
-          !safetyAssessment.safe && getStatusColor(messageStatus)
+          omniguardResult && getStatusColor(omniguardResult.action)
         )}
       >
         <div className="flex flex-col gap-2">
@@ -158,7 +151,7 @@ const ChatMessage = ({
                       <Pencil className="h-4 w-4" />
                     </Button>
                   )}
-                  {!safetyAssessment.safe && (
+                  {!isSafe && (
                     <Button
                       variant="ghost"
                       size="icon"
@@ -173,32 +166,25 @@ const ChatMessage = ({
             )}
           </div>
           
-          {!safetyAssessment.safe && (
-            <div className="flex items-center gap-2">
-              <Badge variant="destructive" className="text-[10px]">
-                {messageStatus.toUpperCase()}
-              </Badge>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="ghost" size="sm" className="h-5 px-2 text-xs text-muted-foreground hover:text-foreground">
-                      Details
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent className="space-y-2">
-                    <p>Sent by: {isUser ? "You" : "Assistant"}</p>
-                    <p>Length: {content.length} characters</p>
-                    <p>Time: {new Date().toLocaleTimeString()}</p>
-                    <p>Reason: {safetyAssessment.reason}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+          {omniguardResult && !isSafe && (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <Badge variant="destructive" className="text-[10px]">
+                  {omniguardResult.action.toUpperCase()}
+                </Badge>
+                {omniguardResult.details?.reason && (
+                  <span className="text-xs text-muted-foreground">
+                    {omniguardResult.details.reason}
+                  </span>
+                )}
+              </div>
+              <OmniGuardDetails result={omniguardResult} isUser={isUser} />
             </div>
           )}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ChatMessage;
+export default ChatMessage
