@@ -4,7 +4,7 @@ import { type Json } from "../integrations/supabase/types"
 export interface OmniGuardResponse {
   response: {
     analysisSummary: string
-    action: "Allow" | "UserInputRejection" | "AssistantOutputRejection"
+    action: "Allow" | "UserRefusal" | "AssistantRefusal"
     details?: {
       reason?: string
       severity?: string

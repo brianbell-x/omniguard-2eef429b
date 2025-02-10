@@ -8,6 +8,7 @@ export interface Message {
   timestamp: number
   omniguardResult?: OmniGuardResult
   assistantResponse?: AssistantResponse
+  role?: "system" | "user" | "assistant" | "developer"
 }
 
 export interface ChatConfig {
@@ -17,4 +18,5 @@ export interface ChatConfig {
   system_prompt: string
   developer_prompt: string
   data_sharing_enabled: boolean
+  openrouter_api_key?: string
 }

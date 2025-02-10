@@ -64,8 +64,8 @@ const ChatMessage = ({
 
   const getStatusColor = (action?: OmniGuardResult["action"]) => {
     switch (action) {
-      case "UserInputRejection":
-      case "AssistantOutputRejection":
+      case "UserRefusal":
+      case "AssistantRefusal":
         return "outline outline-1 outline-destructive/30"
       case "Allow":
         return ""

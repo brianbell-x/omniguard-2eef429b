@@ -121,14 +121,20 @@ export class OmniGuardService {
   }
 
   private async callOpenRouter(messages: Message[], model: string): Promise<OmniGuardResponse> {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      "HTTP-Referer": this.config.site_url,
+      "X-Title": this.config.site_name
+    };
+
+    // If data sharing is disabled and user provided an openrouter key, use it
+    if (!this.config.data_sharing_enabled && this.config.openrouter_api_key) {
+      headers["Authorization"] = `Bearer ${this.config.openrouter_api_key}`;
+    }
+
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "HTTP-Referer": this.config.site_url,
-        "X-Title": this.config.site_name,
-        // Add your API key header here
-      },
+      headers,
       body: JSON.stringify({
         model,
         messages,
@@ -149,7 +155,8 @@ export class OmniGuardService {
       {
         role: "developer" as const,
         content: this.config.developer_prompt,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        isUser: false
       },
       ...messages
     ]
@@ -158,7 +165,8 @@ export class OmniGuardService {
       conversation.push({
         role: "assistant" as const,
         content: draftResponse,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        isUser: false
       })
     }
 
@@ -206,8 +214,8 @@ export class OmniGuardService {
       // Save to database
       await this.saveConversation({
         messages: conversation,
-        user_violates_rules: result.action === "UserInputRejection",
-        assistant_violates_rules: result.action === "AssistantOutputRejection",
+        user_violates_rules: result.action === "UserRefusal",
+        assistant_violates_rules: result.action === "AssistantRefusal",
         usage,
         timings,
         cost: result.cost,
@@ -225,7 +233,7 @@ export class OmniGuardService {
     result: OmniGuardResult,
     messages: Message[]
   ): Promise<AssistantResponse | null> {
-    if (result.action === "UserInputRejection") {
+    if (result.action === "UserRefusal") {
       return null
     }
 
@@ -244,7 +252,8 @@ export class OmniGuardService {
         {
           role: "system" as const,
           content: this.config.system_prompt,
-          timestamp: Date.now()
+          timestamp: Date.now(),
+          isUser: false
         },
         ...messages
       ]
